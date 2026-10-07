@@ -1,0 +1,6 @@
+{
+  "name": "ARTEMIS Augenzentrum Leverkusen & Praxis Opladen",
+  "description": "Offizielle Website des ARTEMIS Augenzentrums Leverkusen & der Augenarzt-Praxis Opladen. Spezialisten für Katarakt-Chirurgie, Glaukom, Makulatherapie, Augenlasern und allgemeine Augenheilkunde.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
