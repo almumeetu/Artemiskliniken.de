@@ -163,9 +163,8 @@ const QualityMarksCarousel: React.FC = () => {
               {qualityMarks.map((mark) => (
                 <figure className="quality-carousel__mark" key={`${copy}-${mark.src}`}>
                   <div className="quality-carousel__logo">
-                    <img src={mark.src} alt="" loading="lazy" decoding="async" />
+                    <img src={mark.src} alt={mark.label} loading="lazy" decoding="async" />
                   </div>
-                  <figcaption>{mark.label}</figcaption>
                 </figure>
               ))}
             </div>

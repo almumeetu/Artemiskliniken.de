@@ -107,7 +107,17 @@ export const StandortePage: React.FC<StandortePageProps> = ({ onNavigate, onOpen
                       <h4><Clock3 aria-hidden="true" className="h-4 w-4" />Sprechzeiten</h4>
                       <ul className="location-card__hours">
                         {location.openingHours.slice(0, 5).map((item) => (
-                          <li key={item.days}><span>{item.days}</span><strong>{item.hours}</strong></li>
+                          <li key={item.days}>
+                            <span>{item.days}</span>
+                            <strong>
+                              {item.hours.includes(' und ') ? (
+                                <>
+                                  <span>{item.hours.split(' und ')[0]}</span>
+                                  <span>und {item.hours.split(' und ').slice(1).join(' und ')}</span>
+                                </>
+                              ) : item.hours}
+                            </strong>
+                          </li>
                         ))}
                       </ul>
                     </section>

@@ -105,9 +105,16 @@ export const ClinicLocationPage: React.FC<ClinicLocationPageProps> = ({
             <h2 className="flex items-center gap-2 text-lg font-semibold text-[#173c78]"><Clock3 aria-hidden="true" className="h-5 w-5 text-[#087bb2]" />Öffnungszeiten</h2>
             <dl className="mt-4 space-y-2 text-sm">
               {location.openingHours.map((hours) => (
-                <div className="flex justify-between gap-4 border-b border-[#edf1f0] pb-2 last:border-0" key={hours.days}>
-                  <dt className="text-[#526873]">{language === 'de' ? hours.days : hours.daysEn}</dt>
-                  <dd className="text-right font-medium text-[#173c78]">{hours.hours}</dd>
+                <div className="flex items-start justify-between gap-4 border-b border-[#edf1f0] pb-2 last:border-0" key={hours.days}>
+                  <dt className="shrink-0 text-[#526873]">{language === 'de' ? hours.days : hours.daysEn}</dt>
+                  <dd className="flex min-w-0 flex-col text-right font-medium leading-snug text-[#173c78]">
+                    {hours.hours.includes(' und ') ? (
+                      <>
+                        <span>{hours.hours.split(' und ')[0]}</span>
+                        <span>und {hours.hours.split(' und ').slice(1).join(' und ')}</span>
+                      </>
+                    ) : hours.hours}
+                  </dd>
                 </div>
               ))}
             </dl>

@@ -41,7 +41,7 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
         aria-modal="true"
         tabIndex={-1}
         ref={dialogRef}
-        className="w-full max-w-2xl overflow-hidden rounded-t-3xl border border-[#d6e1e1] bg-white shadow-2xl sm:rounded-3xl"
+        className="max-h-[100dvh] w-full max-w-2xl overflow-y-auto rounded-t-3xl border border-[#d6e1e1] bg-white shadow-2xl sm:max-h-[calc(100dvh-2.5rem)] sm:rounded-3xl"
         role="dialog"
       >
         <div className="flex items-start justify-between gap-4 border-b border-[#e0e8e7] px-5 py-5 sm:px-7">
@@ -82,10 +82,10 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
                     <ArrowUpRight aria-hidden="true" className="ml-auto h-4 w-4" />
                   </a>
                 ) : (
-                  <a className="button-primary button-primary-small w-full" href={'tel:' + location.phone}>
+                  <a className="button-primary button-primary-small w-full flex-wrap" href={'tel:' + location.phone}>
                     <Phone aria-hidden="true" className="h-4 w-4" />
                     {t('Praxis anrufen', 'Call the practice')}
-                    <span className="ml-auto">{location.phoneDisplay}</span>
+                    <span className="w-full text-center text-xs sm:ml-auto sm:w-auto">{location.phoneDisplay}</span>
                   </a>
                 )}
                 <a className="button-secondary button-secondary-small w-full" href={'tel:' + location.phone}>

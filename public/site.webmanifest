@@ -1,0 +1,17 @@
+{
+  "name": "ARTEMIS Leverkusen und Opladen",
+  "short_name": "ARTEMIS",
+  "description": "Standorte, Leistungen und Kontakt für ARTEMIS Leverkusen und Opladen",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#173c78",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

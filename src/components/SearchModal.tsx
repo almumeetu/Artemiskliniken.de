@@ -212,14 +212,14 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                   className="w-full text-left p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all flex items-center justify-between gap-3 group"
                 >
                   <div className="min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
+                    <div className="mb-0.5 flex min-w-0 items-center gap-2">
                       <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
                         {t(
                           res.type === 'treatment' ? 'Behandlung' : res.type === 'disease' ? 'Augenkrankheit' : res.type === 'diagnostic' ? 'Diagnostik' : res.type === 'doctor' ? 'Ärztliches Team' : 'Standort',
                           res.type === 'treatment' ? 'Treatment' : res.type === 'disease' ? 'Eye condition' : res.type === 'diagnostic' ? 'Diagnostics' : res.type === 'doctor' ? 'Medical team' : 'Location'
                         )}
                       </span>
-                      <h4 className="font-semibold text-sm text-slate-900 group-hover:text-sky-800 truncate">
+                      <h4 className="min-w-0 truncate text-sm font-semibold text-slate-900 group-hover:text-sky-800">
                         {res.title}
                       </h4>
                     </div>

@@ -30,10 +30,10 @@ export const DoctorsPage: React.FC<DoctorsPageProps> = ({ onNavigate, onOpenBook
               <p className="mt-2 text-sm leading-relaxed text-[#526873]">{language === 'de' ? doctor.role : doctor.roleEn}</p>
               {doctor.surgeriesCount && <p className="mt-3 text-xs font-medium text-[#526873]">{doctor.surgeriesCount}</p>}
               <div className="mt-4 space-y-1 text-xs text-[#526873]">
-                {locations.map((location) => <p className="flex items-center gap-1.5" key={location.id}><MapPin aria-hidden="true" className="h-3.5 w-3.5" />{location.name}</p>)}
+                {locations.map((location) => <p className="flex min-w-0 items-start gap-1.5" key={location.id}><MapPin aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0" /><span>{location.name}</span></p>)}
               </div>
               <p className="mt-4 flex-1 text-sm leading-relaxed text-[#425864]">{language === 'de' ? doctor.bio : doctor.bioEn}</p>
-              <div className="mt-6 flex items-center justify-between gap-3 border-t border-[#e8eeed] pt-4">
+              <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-[#e8eeed] pt-4">
                 <button className="text-sm font-semibold text-[#087bb2] hover:underline" onClick={() => onNavigate('aerzte', doctor.slug)}>Profil ansehen <ArrowRight aria-hidden="true" className="ml-1 inline h-4 w-4" /></button>
                 <button className="text-sm font-medium text-[#526873] hover:text-[#173c78]" onClick={() => onOpenBooking(doctor.locations[0])}>Kontakt</button>
               </div>

@@ -5,6 +5,7 @@ import { SchemaMarkup } from './components/SchemaMarkup';
 import { EmergencyBanner } from './components/EmergencyBanner';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
+import { PageSkeleton } from './components/PageSkeleton';
 
 // Modals
 import { BookingWizard } from './components/BookingWizard';
@@ -56,15 +57,40 @@ function normalizeRoute(tab: string, slug?: string) {
   return validSlug ? { tab, slug } : { tab, slug: undefined };
 }
 
-function routeFromHash(hash: string) {
+type AppRoute = { tab: string; slug?: string };
+
+function routePath(tab: string, slug?: string) {
+  if (tab === 'home') return '/';
+  return `/${tab}${slug ? `/${encodeURIComponent(slug)}` : ''}/`;
+}
+
+function routeFromPathname(pathname: string): AppRoute {
+  const parts = pathname.split('/').filter(Boolean);
+  if (parts.length === 0) return { tab: 'home', slug: undefined };
+
+  let slug: string | undefined;
+  try {
+    slug = parts[1] ? decodeURIComponent(parts[1]) : undefined;
+  } catch {
+    slug = undefined;
+  }
+  return normalizeRoute(parts[0], slug);
+}
+
+function legacyRouteFromHash(hash: string): AppRoute | null {
   const [rawTab, rawSlug] = hash.replace(/^#/, '').split('/');
+  if (!ROUTABLE_TABS.has(rawTab)) return null;
   let slug: string | undefined;
   try {
     slug = rawSlug ? decodeURIComponent(rawSlug) : undefined;
   } catch {
     slug = undefined;
   }
-  return normalizeRoute(rawTab || 'home', slug);
+  return normalizeRoute(rawTab, slug);
+}
+
+function currentBrowserRoute(): AppRoute {
+  return legacyRouteFromHash(window.location.hash) ?? routeFromPathname(window.location.pathname);
 }
 
 function pageMetadata(tab: string, slug?: string) {
@@ -108,7 +134,7 @@ function pageMetadata(tab: string, slug?: string) {
 }
 
 export default function App() {
-  const [initialRoute] = useState(() => routeFromHash(window.location.hash));
+  const [initialRoute] = useState(currentBrowserRoute);
   const [currentTab, setCurrentTab] = useState<string>(initialRoute.tab);
   const [currentSlug, setCurrentSlug] = useState<string | undefined>(initialRoute.slug);
 
@@ -116,12 +142,11 @@ export default function App() {
   const [bookingOpen, setBookingOpen] = useState(false);
   const [bookingLocation, setBookingLocation] = useState<string | undefined>();
   const [searchOpen, setSearchOpen] = useState(false);
-  // Keep the in-page router in the URL so pages can be refreshed, shared and revisited.
+  // Keep clean, readable paths in the URL so pages can be refreshed, shared and indexed.
   const handleNavigate = (tab: string, slug?: string) => {
     const nextRoute = normalizeRoute(tab, slug);
-    const route = nextRoute.tab + (nextRoute.slug ? '/' + encodeURIComponent(nextRoute.slug) : '');
-    const nextHash = '#' + route;
-    if (window.location.hash !== nextHash) window.history.pushState(null, '', nextHash);
+    const nextPath = routePath(nextRoute.tab, nextRoute.slug);
+    if (window.location.pathname !== nextPath || window.location.hash) window.history.pushState(null, '', nextPath);
     setCurrentTab(nextRoute.tab);
     setCurrentSlug(nextRoute.slug);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -134,14 +159,20 @@ export default function App() {
 
   useEffect(() => {
     const syncRoute = () => {
-      const route = routeFromHash(window.location.hash);
+      const route = currentBrowserRoute();
       setCurrentTab(route.tab);
       setCurrentSlug(route.slug);
     };
-    window.addEventListener('hashchange', syncRoute);
+
+    const legacyRoute = legacyRouteFromHash(window.location.hash);
+    const normalizedRoute = legacyRoute ?? routeFromPathname(window.location.pathname);
+    const normalizedPath = routePath(normalizedRoute.tab, normalizedRoute.slug);
+    if (legacyRoute || window.location.pathname !== normalizedPath) {
+      window.history.replaceState(null, '', normalizedPath);
+    }
+
     window.addEventListener('popstate', syncRoute);
     return () => {
-      window.removeEventListener('hashchange', syncRoute);
       window.removeEventListener('popstate', syncRoute);
     };
   }, []);
@@ -152,6 +183,15 @@ export default function App() {
     document.querySelector('meta[name="description"]')?.setAttribute('content', metadata.description);
     document.querySelector('meta[property="og:title"]')?.setAttribute('content', metadata.title);
     document.querySelector('meta[property="og:description"]')?.setAttribute('content', metadata.description);
+    const canonicalUrl = `${window.location.origin}${routePath(currentTab, currentSlug)}`;
+    let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.rel = 'canonical';
+      document.head.appendChild(canonical);
+    }
+    canonical.href = canonicalUrl;
+    document.querySelector('meta[property="og:url"]')?.setAttribute('content', canonicalUrl);
   }, [currentTab, currentSlug]);
 
   return (
@@ -181,7 +221,7 @@ export default function App() {
 
           {/* 3. Main View Router */}
           <main id="main-content" className="flex-1" tabIndex={-1}>
-            <Suspense fallback={<div className="mx-auto max-w-7xl px-4 py-20 text-center text-sm text-slate-600" role="status" aria-live="polite">Seite wird geladen …</div>}>
+            <Suspense fallback={<PageSkeleton />}>
             {/* Home */}
             {currentTab === 'home' && (
               <HomePage

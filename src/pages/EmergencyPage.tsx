@@ -35,12 +35,12 @@ export const EmergencyPage: React.FC = () => {
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-[#526873]">Rufen Sie den Standort an und schildern Sie Ihr Anliegen. Das Praxisteam kann Ihnen mitteilen, ob eine Untersuchung vor Ort möglich ist. Bitte nutzen Sie die Praxisnummern nicht als Notruf.</p>
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
           {CLINIC_LOCATIONS.map((location) => (
-            <article className="clinic-card flex items-center justify-between gap-4 p-5" key={location.id}>
-              <div>
+            <article className="clinic-card flex flex-col items-stretch gap-4 p-5 sm:flex-row sm:items-center sm:justify-between" key={location.id}>
+              <div className="min-w-0">
                 <h3 className="font-semibold text-[#173c78]">{location.name}</h3>
                 <p className="mt-1 text-sm text-[#526873]">{location.phoneDisplay}</p>
               </div>
-              <a className="button-secondary button-secondary-small shrink-0" href={'tel:' + location.phone}><Phone aria-hidden="true" className="h-4 w-4" />Anrufen</a>
+              <a className="button-secondary button-secondary-small w-full shrink-0 sm:w-auto" href={'tel:' + location.phone}><Phone aria-hidden="true" className="h-4 w-4" />Anrufen</a>
             </article>
           ))}
         </div>

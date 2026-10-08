@@ -16,16 +16,17 @@ function timeRanges(value: string): { opens: string; closes: string }[] {
 }
 
 export const SchemaMarkup: React.FC = () => {
+  const siteOrigin = typeof window === 'undefined' ? 'https://www.artemiskliniken.de' : window.location.origin;
   const clinicIdFor = (locationId: string) => {
     const location = CLINIC_LOCATIONS.find((item) => item.id === locationId);
     if (!location) return undefined;
-    const slug = location.id === 'leverkusen' ? 'artemis-augenzentrum-leverkusen' : 'artemis-augenarzt-praxis-opladen';
-    return `https://www.artemiskliniken.de/standorte/${slug}/#clinic`;
+    return `${siteOrigin}/standorte/${location.slug}/#clinic`;
   };
 
   const clinics = CLINIC_LOCATIONS.map((location) => ({
     '@type': 'MedicalClinic',
-    '@id': 'https://www.artemiskliniken.de/standorte/' + (location.id === 'leverkusen' ? 'artemis-augenzentrum-leverkusen' : 'artemis-augenarzt-praxis-opladen') + '/#clinic',
+    '@id': `${siteOrigin}/standorte/${location.slug}/#clinic`,
+    url: `${siteOrigin}/standorte/${location.slug}/`,
     name: location.name,
     medicalSpecialty: 'Ophthalmology',
     telephone: location.phone,
@@ -47,13 +48,13 @@ export const SchemaMarkup: React.FC = () => {
 
   const physicians = DOCTORS.map((doctor) => ({
     '@type': 'Physician',
-    '@id': `https://www.artemiskliniken.de/#aerzte/${doctor.slug}`,
+    '@id': `${siteOrigin}/aerzte/${doctor.slug}/#physician`,
     name: doctor.name,
     jobTitle: doctor.role,
     medicalSpecialty: doctor.specialties,
     knowsAbout: doctor.focalAreas,
     worksFor: doctor.locations.map((locationId) => ({ '@id': clinicIdFor(locationId) })),
-    url: `https://www.artemiskliniken.de/#aerzte/${doctor.slug}`,
+    url: `${siteOrigin}/aerzte/${doctor.slug}/`,
   }));
 
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ '@context': 'https://schema.org', '@graph': [...clinics, ...physicians] }) }} />;

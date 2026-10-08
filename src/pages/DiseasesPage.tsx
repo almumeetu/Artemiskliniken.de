@@ -23,7 +23,7 @@ export const DiseasesPage: React.FC<DiseasesPageProps> = ({ onNavigate }) => (
           <article className="clinic-card flex flex-col overflow-hidden" key={disease.id}>
             <img className="clinic-card-image" src={image.src} alt={image.alt} loading="lazy" />
             <div className="flex flex-1 flex-col p-6">
-              <div className="flex items-start justify-between gap-3">
+              <div className="flex flex-wrap items-start justify-between gap-3">
                 <h2 className="text-xl font-semibold text-[#173c78]">{disease.name}</h2>
                 {disease.urgencyLevel === 'urgent' && <span className="shrink-0 rounded-full bg-[#fff0e8] px-2.5 py-1 text-xs font-semibold text-[#8b3d2d]">Dringend abklären</span>}
               </div>

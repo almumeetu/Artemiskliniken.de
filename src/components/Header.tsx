@@ -53,16 +53,16 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="text-white/70">Standorte, Leistungen und Kontakt auf einen Blick</span>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-[4.5rem] sm:h-[5.25rem] flex items-center justify-between gap-2 sm:gap-4">
+        <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-[4px] px-[12px] sm:h-[84px] sm:gap-4 sm:px-6 lg:px-8">
           
           {/* Brand wordmark from the supplied ARTEMIS assets */}
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="min-w-0 shrink-0">
             <button
               onClick={() => onNavigate('home')}
-              className="rounded-sm text-left focus:outline-none focus:ring-2 focus:ring-sky-600"
+              className="rounded-sm text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600"
               aria-label="ARTEMIS Augenzentrum Leverkusen Startseite"
             >
-              <img className="h-auto w-28 sm:w-44" src={ARTEMIS_IMAGES.logo} alt="ARTEMIS Augenkliniken und medizinische Versorgungszentren" />
+              <img className="h-auto w-[144px] min-[380px]:w-[160px] sm:w-[224px]" src={ARTEMIS_IMAGES.logo} alt="ARTEMIS Augenkliniken und medizinische Versorgungszentren" />
               <span className="sr-only">Leverkusen und Opladen</span>
             </button>
           </div>
@@ -95,29 +95,20 @@ export const Header: React.FC<HeaderProps> = ({
           </nav>
 
           {/* Zone 3: 1-2 primary actions + functional tools */}
-          <div className="flex items-center gap-1 sm:gap-3">
+          <div className="flex items-center gap-[4px] sm:gap-3">
             
             {/* Universal Search */}
             <button
               onClick={onOpenSearch}
-              className="rounded-lg p-1.5 text-slate-600 transition-colors hover:bg-[#e8f3f3] hover:text-[#173c78] focus:ring-2 focus:ring-[#28a9d8] sm:p-2"
+              className="grid h-[40px] w-[40px] place-items-center rounded-full text-[#173c78] transition-colors hover:bg-[#e8f3f3] focus:ring-2 focus:ring-[#28a9d8] sm:h-auto sm:w-auto sm:rounded-lg sm:p-2 sm:text-slate-600"
               aria-label={t('Suche öffnen (Behandlungen, Ärzte, Symptome)', 'Open search')}
               title={t('Suche', 'Search')}
             >
               <Search className="w-5 h-5" aria-hidden="true" />
             </button>
 
-            <a
-              href="tel:+4921444488"
-              className="rounded-lg p-1.5 text-slate-600 transition-colors hover:bg-[#e8f3f3] hover:text-[#173c78] sm:hidden"
-              aria-label="ARTEMIS Augenzentrum Leverkusen anrufen: 0214 44488"
-              title="Anrufen"
-            >
-              <Phone className="w-5 h-5" aria-hidden="true" />
-            </a>
-
             {/* Accessibility toggle dropdown */}
-            <div className="relative">
+            <div className="relative hidden sm:block">
               <button
                 onClick={() => setShowA11yMenu(!showA11yMenu)}
                 className={`rounded-lg p-1.5 transition-colors focus:ring-2 focus:ring-sky-600 sm:p-2 ${
@@ -180,18 +171,21 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={onOpenBooking}
               aria-label={t('Termin vereinbaren', 'Book an appointment')}
               title={t('Termin vereinbaren', 'Book an appointment')}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[#087bb2] p-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-[#173c78] active:bg-[#0a3268] focus:ring-2 focus:ring-[#28a9d8] sm:gap-2 sm:px-4 sm:py-2.5 md:text-sm whitespace-nowrap"
+              className="hidden items-center gap-2 whitespace-nowrap rounded-lg bg-[#087bb2] px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-[#173c78] active:bg-[#0a3268] focus:ring-2 focus:ring-[#28a9d8] sm:inline-flex md:text-sm"
             >
               <Calendar className="w-4 h-4" aria-hidden="true" />
-              <span className="hidden min-[380px]:inline">{t('Termin', 'Book')}</span>
+              <span>{t('Termin', 'Book')}</span>
             </button>
 
             {/* Mobile menu hamburger toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="xl:hidden rounded-lg p-1.5 text-slate-600 transition-colors hover:bg-[#e8f3f3] hover:text-slate-900 focus:ring-2 focus:ring-[#28a9d8] sm:p-2"
+              className={`grid h-[40px] w-[40px] place-items-center rounded-full transition-colors focus:ring-2 focus:ring-[#28a9d8] xl:hidden ${
+                mobileMenuOpen ? 'bg-[#173c78] text-white' : 'bg-[#eef5f8] text-[#173c78] hover:bg-[#dcecf2]'
+              }`}
               aria-label={mobileMenuOpen ? t('Menü schließen', 'Close menu') : t('Menü öffnen', 'Open menu')}
               aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -200,15 +194,16 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Mobile Slide-down Navigation */}
         {mobileMenuOpen && (
-          <div className="xl:hidden bg-white border-t border-slate-200 px-4 pt-3 pb-6 shadow-xl">
-            <div className="flex flex-col space-y-1 mb-4">
+          <div id="mobile-navigation" className="border-t border-slate-200 bg-white shadow-xl xl:hidden">
+            <div className="mx-auto max-w-7xl px-4 pb-5 pt-4 sm:px-6">
+            <div className="mb-4 flex flex-col space-y-1">
               {navLinks.map((link) => (
                 <button
                   key={link.id}
                   onClick={() => handleNavLinkClick(link.id)}
-                  className={`text-left px-3 py-2.5 rounded-md text-base font-medium transition-colors ${
+                  className={`rounded-lg px-3 py-2.5 text-left text-[0.95rem] font-medium transition-colors ${
                     currentTab === link.id
-                      ? 'bg-sky-50 text-sky-800 font-semibold'
+                      ? 'bg-[#edf6fa] font-semibold text-[#173c78]'
                       : 'text-slate-700 hover:bg-slate-50'
                   }`}
                 >
@@ -217,28 +212,71 @@ export const Header: React.FC<HeaderProps> = ({
               ))}
             </div>
 
-            <div className="pt-3 border-t border-slate-200 space-y-2">
+            <div className="space-y-2 border-t border-slate-200 pt-4">
               <button
                 onClick={() => {
                   onOpenBooking();
                   setMobileMenuOpen(false);
                 }}
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg bg-sky-700 hover:bg-sky-800 text-white font-semibold text-sm shadow-sm"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#087bb2] px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[#173c78] sm:hidden"
               >
                 <Calendar className="w-4 h-4" />
                 {t('Termin online vereinbaren', 'Book Appointment Online')}
               </button>
+
+              <div className="grid grid-cols-2 gap-2 sm:hidden">
+                <a
+                  href="tel:+4921444488"
+                  className="flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[#dce3ec] bg-white px-3 py-2.5 text-sm font-semibold text-[#173c78]"
+                  aria-label="ARTEMIS Augenzentrum Leverkusen anrufen: 0214 44488"
+                >
+                  <Phone className="h-4 w-4 text-[#087bb2]" aria-hidden="true" />
+                  Anrufen
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setShowA11yMenu(!showA11yMenu)}
+                  className="flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[#dce3ec] bg-white px-3 py-2.5 text-sm font-semibold text-[#173c78]"
+                  aria-expanded={showA11yMenu}
+                  aria-controls="mobile-accessibility"
+                >
+                  <Eye className="h-4 w-4 text-[#087bb2]" aria-hidden="true" />
+                  Lesbarkeit
+                </button>
+              </div>
+
+              {showA11yMenu && (
+                <div id="mobile-accessibility" className="grid gap-2 rounded-lg bg-[#f3f7fa] p-3 sm:hidden">
+                  <button
+                    type="button"
+                    onClick={cycleTextSize}
+                    className="flex items-center justify-between rounded-md bg-white px-3 py-2.5 text-sm text-slate-700"
+                  >
+                    <span className="flex items-center gap-2"><Type className="h-4 w-4 text-[#087bb2]" />Schriftgröße</span>
+                    <span className="font-bold uppercase text-[#173c78]">{textSize}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setHighContrast(!highContrast)}
+                    className={`flex items-center justify-between rounded-md px-3 py-2.5 text-sm ${highContrast ? 'bg-[#173c78] text-white' : 'bg-white text-slate-700'}`}
+                  >
+                    <span className="flex items-center gap-2"><Contrast className="h-4 w-4" />Hoher Kontrast</span>
+                    <span className="font-semibold">{highContrast ? 'An' : 'Aus'}</span>
+                  </button>
+                </div>
+              )}
 
               <button
                 onClick={() => {
                   onOpenEmergency();
                   setMobileMenuOpen(false);
                 }}
-                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-slate-50 text-slate-700 font-medium text-xs border border-slate-200"
+                className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-xs font-medium text-slate-700"
               >
                 <AlertTriangle className="w-4 h-4" aria-hidden="true" />
                 {t('Akute Beschwerden – Notfallhinweise', 'Urgent symptoms – emergency guidance')}
               </button>
+            </div>
             </div>
           </div>
         )}
