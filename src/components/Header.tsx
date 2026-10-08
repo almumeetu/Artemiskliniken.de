@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Calendar, Phone, Globe, Menu, X, Eye, Type, Contrast, MapPin, Clock } from 'lucide-react';
+import { Search, Calendar, Phone, Menu, X, Eye, Type, Contrast, MapPin, AlertTriangle } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useAccessibility } from '../context/AccessibilityContext';
 
@@ -18,7 +18,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenSearch,
   onOpenEmergency,
 }) => {
-  const { language, setLanguage, t } = useLanguage();
+  const { t } = useLanguage();
   const { textSize, setTextSize, highContrast, setHighContrast } = useAccessibility();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showA11yMenu, setShowA11yMenu] = useState(false);
@@ -49,10 +49,9 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="hidden md:block bg-[#12304a] text-white/90 text-[11px]">
           <div className="max-w-7xl mx-auto px-6 lg:px-8 h-8 flex items-center justify-between">
             <div className="flex items-center gap-5">
-              <span className="inline-flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-[#8bd3d9]" />Leverkusen &amp; Opladen</span>
-              <span className="inline-flex items-center gap-1.5"><Clock className="w-3.5 h-3.5 text-[#8bd3d9]" />Sprechzeiten: Mo–Fr 08:00–17:00</span>
+              <span className="inline-flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-[#8bd3d9]" />Augenzentrum Leverkusen &amp; Praxis Opladen</span>
             </div>
-            <span className="text-white/70">Ihre Augen. Unser Anspruch.</span>
+            <span className="text-white/70">Standorte, Leistungen und Kontakt auf einen Blick</span>
           </div>
         </div>
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-[4.5rem] sm:h-[5.25rem] flex items-center justify-between gap-2 sm:gap-4">
@@ -80,7 +79,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Zone 2: 4-6 clean text navigation links */}
           <nav
             aria-label="Hauptnavigation"
-            className="hidden lg:flex items-center gap-5 xl:gap-7 text-sm font-medium text-slate-700"
+            className="hidden xl:flex items-center gap-5 text-sm font-medium text-slate-700"
           >
             {navLinks.map((link) => {
               const isActive = currentTab === link.id;
@@ -116,6 +115,15 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Search className="w-5 h-5" aria-hidden="true" />
             </button>
+
+            <a
+              href="tel:+4921444488"
+              className="p-2 text-slate-600 hover:text-[#12304a] hover:bg-[#e8f3f3] rounded-lg transition-colors sm:hidden"
+              aria-label="ARTEMIS Augenzentrum Leverkusen anrufen: 0214 44488"
+              title="Anrufen"
+            >
+              <Phone className="w-5 h-5" aria-hidden="true" />
+            </a>
 
             {/* Accessibility toggle dropdown */}
             <div className="relative">
@@ -176,20 +184,6 @@ export const Header: React.FC<HeaderProps> = ({
               )}
             </div>
 
-            {/* Language toggle DE / EN */}
-            <button
-              onClick={() => setLanguage(language === 'de' ? 'en' : 'de')}
-              className="px-2.5 py-1 text-xs font-semibold text-slate-700 hover:text-[#12304a] border border-[#c9dadd] rounded-lg hover:bg-[#e8f3f3] transition-colors flex items-center gap-1"
-              aria-label={
-                language === 'de'
-                  ? 'Switch to English version'
-                  : 'Zur deutschen Version wechseln'
-              }
-            >
-              <Globe className="w-3.5 h-3.5 text-slate-500" aria-hidden="true" />
-              <span>{language.toUpperCase()}</span>
-            </button>
-
             {/* Primary Action CTA: Termin buchen */}
             <button
               onClick={onOpenBooking}
@@ -202,7 +196,7 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Mobile menu hamburger toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 text-slate-600 hover:text-slate-900 hover:bg-[#e8f3f3] rounded-lg transition-colors focus:ring-2 focus:ring-[#1689a5]"
+              className="xl:hidden p-2 text-slate-600 hover:text-slate-900 hover:bg-[#e8f3f3] rounded-lg transition-colors focus:ring-2 focus:ring-[#1689a5]"
               aria-label={mobileMenuOpen ? t('Menü schließen', 'Close menu') : t('Menü öffnen', 'Open menu')}
               aria-expanded={mobileMenuOpen}
             >
@@ -213,7 +207,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Mobile Slide-down Navigation */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-white border-t border-slate-200 px-4 pt-3 pb-6 shadow-xl">
+          <div className="xl:hidden bg-white border-t border-slate-200 px-4 pt-3 pb-6 shadow-xl">
             <div className="flex flex-col space-y-1 mb-4">
               {navLinks.map((link) => (
                 <button
@@ -247,10 +241,10 @@ export const Header: React.FC<HeaderProps> = ({
                   onOpenEmergency();
                   setMobileMenuOpen(false);
                 }}
-                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-red-50 text-red-700 font-medium text-xs border border-red-200"
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-slate-50 text-slate-700 font-medium text-xs border border-slate-200"
               >
-                <Phone className="w-4 h-4" />
-                {t('Akutfall-Hotline (0214 44488)', 'Urgent Hotline (0214 44488)')}
+                <AlertTriangle className="w-4 h-4" aria-hidden="true" />
+                {t('Akute Beschwerden – Notfallhinweise', 'Urgent symptoms – emergency guidance')}
               </button>
             </div>
           </div>

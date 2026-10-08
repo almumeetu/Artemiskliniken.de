@@ -1,141 +1,59 @@
 import React from 'react';
+import { ArrowRight, CalendarDays, MapPin, Phone } from 'lucide-react';
 import { CLINIC_LOCATIONS } from '../data/clinics';
 import { useLanguage } from '../context/LanguageContext';
-import { MapPin, Phone, Clock, ShieldCheck, ArrowRight, Calendar, Train, Car } from 'lucide-react';
 
 interface StandortePageProps {
   onNavigate: (tab: string, slug?: string) => void;
-  onOpenBooking: (locId?: string) => void;
+  onOpenBooking: (locId?: string, srvId?: string) => void;
 }
 
-export const StandortePage: React.FC<StandortePageProps> = ({
-  onNavigate,
-  onOpenBooking,
-}) => {
-  const { t, language } = useLanguage();
+export const StandortePage: React.FC<StandortePageProps> = ({ onNavigate, onOpenBooking }) => {
+  const { language } = useLanguage();
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12 pb-20">
-      
-      {/* Header */}
-      <div className="max-w-3xl space-y-3">
-        <span className="text-xs font-semibold uppercase tracking-wider text-sky-800">
-          {t('Regionale Augenzentren im Rheinland', 'Regional Eye Care Facilities')}
-        </span>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-          {t('Unsere Standorte in Leverkusen & Opladen', 'Our Clinic Locations in Leverkusen & Opladen')}
-        </h1>
-        <p className="text-base text-slate-600 leading-relaxed">
-          {t(
-            'Zwei moderne Standorte mit klarer Schwerpunktaufteilung: Ambulante Hochleistungs-Augenchirurgie in Leverkusen-Wiesdorf und persönliche Grundversorgung mit Kinder-Sehschule in Leverkusen-Opladen.',
-            'Two modern facilities with complementary clinical focus: High-precision outpatient ophthalmic surgery in Leverkusen-Wiesdorf, and community eye care with pediatric orthoptics in Opladen.'
-          )}
+    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+      <header className="max-w-3xl">
+        <p className="clinic-eyebrow">ARTEMIS vor Ort</p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[#15344a] sm:text-5xl">Standorte in Leverkusen</h1>
+        <p className="mt-4 text-base leading-relaxed text-[#526873]">
+          Wählen Sie den Standort, der zu Ihrem Anliegen passt. Das Augenzentrum Leverkusen ist zugleich ambulantes OP-Zentrum; die Praxis Opladen bietet augenärztliche Diagnostik und Vorsorge.
         </p>
-      </div>
+      </header>
 
-      {/* Side-by-side Branches */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {CLINIC_LOCATIONS.map((loc) => {
-          const isLeverkusen = loc.id === 'leverkusen';
-          return (
-            <div
-              key={loc.id}
-              className={`rounded-3xl border p-8 bg-white shadow-sm flex flex-col justify-between ${
-                isLeverkusen ? 'border-sky-300 ring-1 ring-sky-300/40' : 'border-emerald-300 ring-1 ring-emerald-300/40'
-              }`}
-            >
-              <div className="space-y-6">
-                
-                {/* Badge & Title */}
-                <div>
-                  <span
-                    className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
-                      isLeverkusen ? 'bg-sky-100 text-sky-800' : 'bg-emerald-100 text-emerald-800'
-                    }`}
-                  >
-                    {isLeverkusen ? 'OP-Zentrum & Chirurgie' : 'Facharztpraxis & Sehschule'}
-                  </span>
-                  <h2 className="text-2xl font-bold text-slate-900 mt-2 mb-1">
-                    {loc.name}
-                  </h2>
-                  <p className="text-xs text-slate-600">
-                    {language === 'de' ? loc.subTitle : loc.subTitleEn}
-                  </p>
-                </div>
+      <div className="mt-9 grid gap-6 lg:grid-cols-2">
+        {CLINIC_LOCATIONS.map((location) => (
+          <article className="clinic-card flex flex-col p-6 sm:p-8" key={location.id}>
+            <p className="clinic-eyebrow">{location.isOpZentrum ? 'Praxis und ambulantes OP-Zentrum' : 'Augenarzt-Praxis'}</p>
+            <h2 className="mt-2 text-2xl font-semibold text-[#15344a]">{location.name}</h2>
+            <p className="mt-2 text-sm text-[#526873]">{language === 'de' ? location.subTitle : location.subTitleEn}</p>
 
-                {/* NAP Details */}
-                <div className="space-y-2.5 text-xs text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                  <div className="flex items-start gap-2">
-                    <MapPin className="w-4 h-4 text-sky-700 shrink-0 mt-0.5" />
-                    <span>
-                      {loc.street}, {loc.postalCode} {loc.city}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-sky-700 shrink-0" />
-                    <a href={`tel:${loc.phone.replace(/\s+/g, '')}`} className="font-semibold text-slate-900 hover:underline">
-                      Tel: {loc.phoneDisplay}
-                    </a>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-sky-700 shrink-0" />
-                    <span>
-                      {isLeverkusen ? 'Mo–Do: 8–17 Uhr | Fr: 8–12 Uhr' : 'Mo, Di, Do: 8–12:30 & 14–17 Uhr | Mi, Fr: 8–12:30 Uhr'}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Key Features */}
-                <div>
-                  <span className="text-xs font-bold text-slate-900 block mb-2">
-                    {t('Klinische Besonderheiten:', 'Facility Features:')}
-                  </span>
-                  <ul className="space-y-1.5 text-xs text-slate-600">
-                    {(language === 'de' ? loc.features : loc.featuresEn).slice(0, 4).map((f, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <span className="text-sky-700 font-bold">•</span>
-                        <span>{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Transit & Parking */}
-                <div className="text-xs text-slate-500 space-y-1.5 border-t border-slate-100 pt-3">
-                  <div className="flex items-start gap-2">
-                    <Train className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
-                    <span>{loc.publicTransport.train}</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <Car className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
-                    <span>{loc.publicTransport.parking}</span>
-                  </div>
-                </div>
-
+            <div className="mt-6 space-y-3 text-sm text-[#344b58]">
+              <p className="flex items-start gap-3"><MapPin aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-[#16766f]" />{location.street}<br />{location.postalCode} {location.city}</p>
+              <a className="flex items-center gap-3 font-semibold text-[#176b68] hover:underline" href={'tel:' + location.phone}><Phone aria-hidden="true" className="h-5 w-5" />{location.phoneDisplay}</a>
+              <div className="pt-3">
+                <h3 className="font-semibold text-[#15344a]">Leistungen</h3>
+                <ul className="mt-2 grid gap-2 sm:grid-cols-2">
+                  {location.features.slice(0, 6).map((feature) => <li className="service-list-item service-list-item-compact" key={feature}><span aria-hidden="true" className="service-list-dot" /><span>{feature}</span></li>)}
+                </ul>
               </div>
-
-              {/* Action Buttons */}
-              <div className="pt-6 border-t border-slate-100 flex items-center justify-between gap-3 mt-6">
-                <button
-                  onClick={() => onNavigate('standorte', loc.slug)}
-                  className="text-xs font-semibold text-sky-800 hover:underline flex items-center gap-1"
-                >
-                  <span>{t('Standortdetails & Ärzte ansehen', 'View branch details')}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  onClick={() => onOpenBooking(loc.id)}
-                  className="px-4 py-2 bg-sky-800 hover:bg-sky-900 text-white font-semibold rounded-lg text-xs transition-colors shadow-xs"
-                >
-                  {t('Termin vereinbaren', 'Book')}
-                </button>
-              </div>
-
+              <p className="border-t border-[#e0e8e7] pt-4 text-xs text-[#526873]">
+                Öffnungszeiten: {location.openingHours.slice(0, 5).map((item) => item.hours).filter((item, index, items) => items.indexOf(item) === index).join(' · ')}
+              </p>
             </div>
-          );
-        })}
-      </div>
 
+            <div className="mt-auto flex flex-col gap-3 pt-7 sm:flex-row">
+              <button className="button-primary button-primary-small" onClick={() => onNavigate('standorte', location.slug)}>
+                Standortdetails <ArrowRight aria-hidden="true" className="h-4 w-4" />
+              </button>
+              <button className="button-secondary button-secondary-small" onClick={() => onOpenBooking(location.id)}>
+                <CalendarDays aria-hidden="true" className="h-4 w-4" />
+                {location.bookingUrl ? 'Online-Termin' : 'Kontakt aufnehmen'}
+              </button>
+            </div>
+          </article>
+        ))}
+      </div>
     </div>
   );
 };

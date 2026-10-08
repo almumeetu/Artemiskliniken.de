@@ -8,12 +8,7 @@ import { Footer } from './components/Footer';
 
 // Modals
 import { BookingWizard } from './components/BookingWizard';
-import { AmslerGridModal } from './components/AmslerGridModal';
-import { LaserQuizModal } from './components/LaserQuizModal';
-import { GlaucomaRiskModal } from './components/GlaucomaRiskModal';
-import { IOLGuideModal } from './components/IOLGuideModal';
 import { SearchModal } from './components/SearchModal';
-import { CookieBanner } from './components/CookieBanner';
 
 // Pages
 import { HomePage } from './pages/HomePage';
@@ -30,51 +25,134 @@ import { DoctorsPage } from './pages/DoctorsPage';
 import { DoctorDetailPage } from './pages/DoctorDetailPage';
 import { PatientInfoPage } from './pages/PatientInfoPage';
 import { EmergencyPage } from './pages/EmergencyPage';
-import { MigrationMatrixPage } from './pages/MigrationMatrixPage';
 import { LegalPage } from './pages/LegalPage';
+import { TREATMENTS } from './data/treatments';
+import { EYE_DISEASES } from './data/diseases';
+import { DIAGNOSTICS } from './data/diagnostics';
+import { DOCTORS } from './data/doctors';
+import { CLINIC_LOCATIONS } from './data/clinics';
+
+const ROUTABLE_TABS = new Set([
+  'home', 'standorte', 'behandlungen', 'augenkrankheiten', 'diagnostik', 'aerzte',
+  'patienten-info', 'notfall-akutfall', 'impressum', 'datenschutz',
+]);
+
+function normalizeRoute(tab: string, slug?: string) {
+  if (!ROUTABLE_TABS.has(tab)) return { tab: 'home', slug: undefined };
+  if (!slug) return { tab, slug: undefined };
+
+  const validSlug = tab === 'standorte'
+    ? ['leverkusen', 'opladen'].includes(slug)
+    : tab === 'behandlungen'
+      ? TREATMENTS.some((item) => item.slug === slug)
+      : tab === 'augenkrankheiten'
+        ? EYE_DISEASES.some((item) => item.slug === slug)
+        : tab === 'diagnostik'
+          ? DIAGNOSTICS.some((item) => item.slug === slug)
+          : tab === 'aerzte'
+            ? DOCTORS.some((item) => item.slug === slug)
+            : false;
+
+  return validSlug ? { tab, slug } : { tab, slug: undefined };
+}
+
+function routeFromHash(hash: string) {
+  const [rawTab, rawSlug] = hash.replace(/^#/, '').split('/');
+  let slug: string | undefined;
+  try {
+    slug = rawSlug ? decodeURIComponent(rawSlug) : undefined;
+  } catch {
+    slug = undefined;
+  }
+  return normalizeRoute(rawTab || 'home', slug);
+}
+
+function pageMetadata(tab: string, slug?: string) {
+  if (tab === 'standorte' && slug) {
+    const location = CLINIC_LOCATIONS.find((item) => item.slug === slug);
+    if (location) return {
+      title: `${location.name} | ARTEMIS`,
+      description: `${location.name}: Adresse, Öffnungszeiten, Kontakt und Leistungen am Standort ${location.city}.`,
+    };
+  }
+  if (tab === 'behandlungen' && slug) {
+    const treatment = TREATMENTS.find((item) => item.slug === slug);
+    if (treatment) return { title: `${treatment.name} | ARTEMIS`, description: treatment.shortSummary };
+  }
+  if (tab === 'augenkrankheiten' && slug) {
+    const disease = EYE_DISEASES.find((item) => item.slug === slug);
+    if (disease) return { title: `${disease.name} | ARTEMIS`, description: disease.shortSummary };
+  }
+  if (tab === 'diagnostik' && slug) {
+    const diagnostic = DIAGNOSTICS.find((item) => item.slug === slug);
+    if (diagnostic) return { title: `${diagnostic.name} | ARTEMIS`, description: diagnostic.shortSummary };
+  }
+  if (tab === 'aerzte' && slug) {
+    const doctor = DOCTORS.find((item) => item.slug === slug);
+    if (doctor) return { title: `${doctor.name} | ARTEMIS`, description: doctor.bio };
+  }
+
+  const pages: Record<string, { title: string; description: string }> = {
+    home: { title: 'Augenarzt in Leverkusen & Opladen | ARTEMIS', description: 'ARTEMIS Augenzentrum Leverkusen und Augenarzt-Praxis Opladen: Leistungen, Öffnungszeiten, Kontakt und Informationen zur Terminvereinbarung.' },
+    standorte: { title: 'Standorte in Leverkusen | ARTEMIS', description: 'Adresse, Öffnungszeiten und Kontakt zum ARTEMIS Augenzentrum Leverkusen und zur Augenarzt-Praxis Opladen.' },
+    behandlungen: { title: 'Augenärztliche Behandlungen | ARTEMIS', description: 'Informationen zu Behandlungen und operativen Schwerpunkten am ARTEMIS-Standort Leverkusen.' },
+    augenkrankheiten: { title: 'Augenkrankheiten im Überblick | ARTEMIS', description: 'Verlässliche Orientierung zu häufigen Augenerkrankungen und weiterführenden Informationen von ARTEMIS.' },
+    diagnostik: { title: 'Augenärztliche Diagnostik | ARTEMIS', description: 'Informationen zur augenärztlichen Basis- und Spezialdiagnostik an den ARTEMIS-Standorten in Leverkusen.' },
+    aerzte: { title: 'Ärztliches Team in Leverkusen und Opladen | ARTEMIS', description: 'Das ärztliche Team an den ARTEMIS-Standorten Leverkusen und Opladen.' },
+    'patienten-info': { title: 'Informationen für Ihren Besuch | ARTEMIS', description: 'Hinweise zur Terminvereinbarung, Vorbereitung auf Ihren Besuch und Fragen zu Kosten und Versicherung.' },
+    'notfall-akutfall': { title: 'Akute Augenbeschwerden | ARTEMIS', description: 'Orientierung bei akuten Augenbeschwerden: ärztlicher Bereitschaftsdienst 116 117, Rettungsdienst 112.' },
+    impressum: { title: 'Impressum | ARTEMIS', description: 'Impressum und rechtliche Angaben der ARTEMIS Augenkliniken GmbH.' },
+    datenschutz: { title: 'Datenschutz | ARTEMIS', description: 'Datenschutzhinweise der ARTEMIS Augenkliniken GmbH.' },
+  };
+  return pages[tab] || pages.home;
+}
 
 export default function App() {
-  const [currentTab, setCurrentTab] = useState<string>('home');
-  const [currentSlug, setCurrentSlug] = useState<string | undefined>(undefined);
+  const [initialRoute] = useState(() => routeFromHash(window.location.hash));
+  const [currentTab, setCurrentTab] = useState<string>(initialRoute.tab);
+  const [currentSlug, setCurrentSlug] = useState<string | undefined>(initialRoute.slug);
 
   // Modal states
   const [bookingOpen, setBookingOpen] = useState(false);
-  const [bookingLocation, setBookingLocation] = useState<string | undefined>('leverkusen');
-  const [bookingService, setBookingService] = useState<string | undefined>(undefined);
-
-  const [amslerOpen, setAmslerOpen] = useState(false);
-  const [laserQuizOpen, setLaserQuizOpen] = useState(false);
-  const [glaucomaCheckOpen, setGlaucomaCheckOpen] = useState(false);
-  const [iolGuideOpen, setIolGuideOpen] = useState(false);
+  const [bookingLocation, setBookingLocation] = useState<string | undefined>();
   const [searchOpen, setSearchOpen] = useState(false);
-  const [cookieSettingsOpen, setCookieSettingsOpen] = useState(false);
-
-  // Scroll to top on navigation
+  // Keep the in-page router in the URL so pages can be refreshed, shared and revisited.
   const handleNavigate = (tab: string, slug?: string) => {
-    setCurrentTab(tab);
-    setCurrentSlug(slug);
+    const nextRoute = normalizeRoute(tab, slug);
+    const route = nextRoute.tab + (nextRoute.slug ? '/' + encodeURIComponent(nextRoute.slug) : '');
+    const nextHash = '#' + route;
+    if (window.location.hash !== nextHash) window.history.pushState(null, '', nextHash);
+    setCurrentTab(nextRoute.tab);
+    setCurrentSlug(nextRoute.slug);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleOpenBooking = (locId?: string, srvId?: string) => {
-    if (locId) setBookingLocation(locId);
-    if (srvId) setBookingService(srvId);
+  const handleOpenBooking = (locId?: string, _serviceId?: string) => {
+    setBookingLocation(locId);
     setBookingOpen(true);
   };
 
-  // Synchronize browser history / URL hash if desired
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash.replace('#', '');
-      if (hash) {
-        const parts = hash.split('/');
-        setCurrentTab(parts[0]);
-        if (parts[1]) setCurrentSlug(parts[1]);
-      }
+    const syncRoute = () => {
+      const route = routeFromHash(window.location.hash);
+      setCurrentTab(route.tab);
+      setCurrentSlug(route.slug);
     };
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('hashchange', syncRoute);
+    window.addEventListener('popstate', syncRoute);
+    return () => {
+      window.removeEventListener('hashchange', syncRoute);
+      window.removeEventListener('popstate', syncRoute);
+    };
   }, []);
+
+  useEffect(() => {
+    const metadata = pageMetadata(currentTab, currentSlug);
+    document.title = metadata.title;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', metadata.description);
+    document.querySelector('meta[property="og:title"]')?.setAttribute('content', metadata.title);
+    document.querySelector('meta[property="og:description"]')?.setAttribute('content', metadata.description);
+  }, [currentTab, currentSlug]);
 
   return (
     <LanguageProvider>
@@ -108,10 +186,6 @@ export default function App() {
               <HomePage
                 onNavigate={handleNavigate}
                 onOpenBooking={handleOpenBooking}
-                onOpenAmsler={() => setAmslerOpen(true)}
-                onOpenLaserQuiz={() => setLaserQuizOpen(true)}
-                onOpenGlaucomaCheck={() => setGlaucomaCheckOpen(true)}
-                onOpenIOLGuide={() => setIolGuideOpen(true)}
               />
             )}
 
@@ -135,9 +209,6 @@ export default function App() {
                 slug={currentSlug}
                 onNavigate={handleNavigate}
                 onOpenBooking={handleOpenBooking}
-                onOpenIOLGuide={() => setIolGuideOpen(true)}
-                onOpenLaserQuiz={() => setLaserQuizOpen(true)}
-                onOpenAmsler={() => setAmslerOpen(true)}
               />
             )}
 
@@ -150,8 +221,6 @@ export default function App() {
                 slug={currentSlug}
                 onNavigate={handleNavigate}
                 onOpenBooking={handleOpenBooking}
-                onOpenAmsler={() => setAmslerOpen(true)}
-                onOpenGlaucomaCheck={() => setGlaucomaCheckOpen(true)}
               />
             )}
 
@@ -190,11 +259,6 @@ export default function App() {
             {/* Notfall & Akutfall */}
             {currentTab === 'notfall-akutfall' && <EmergencyPage />}
 
-            {/* URL Migration & Parity Matrix */}
-            {currentTab === 'migration-matrix' && (
-              <MigrationMatrixPage onNavigate={handleNavigate} />
-            )}
-
             {/* Legal Pages */}
             {currentTab === 'impressum' && <LegalPage initialTab="impressum" />}
             {currentTab === 'datenschutz' && <LegalPage initialTab="datenschutz" />}
@@ -204,7 +268,6 @@ export default function App() {
           <Footer
             onNavigate={handleNavigate}
             onOpenBooking={() => handleOpenBooking()}
-            onOpenCookieSettings={() => setCookieSettingsOpen(true)}
           />
 
           {/* 5. Modals & Interactive Decision Aides */}
@@ -212,43 +275,12 @@ export default function App() {
             isOpen={bookingOpen}
             onClose={() => setBookingOpen(false)}
             preselectedLocation={bookingLocation}
-            preselectedService={bookingService}
-          />
-
-          <AmslerGridModal
-            isOpen={amslerOpen}
-            onClose={() => setAmslerOpen(false)}
-            onBookAppointment={() => handleOpenBooking('leverkusen', 'makula')}
-          />
-
-          <LaserQuizModal
-            isOpen={laserQuizOpen}
-            onClose={() => setLaserQuizOpen(false)}
-            onBookAppointment={() => handleOpenBooking('leverkusen', 'laser')}
-          />
-
-          <GlaucomaRiskModal
-            isOpen={glaucomaCheckOpen}
-            onClose={() => setGlaucomaCheckOpen(false)}
-            onBookAppointment={() => handleOpenBooking('leverkusen', 'glaukom')}
-          />
-
-          <IOLGuideModal
-            isOpen={iolGuideOpen}
-            onClose={() => setIolGuideOpen(false)}
-            onBookAppointment={() => handleOpenBooking('leverkusen', 'katarakt')}
           />
 
           <SearchModal
             isOpen={searchOpen}
             onClose={() => setSearchOpen(false)}
             onSelectResult={handleNavigate}
-          />
-
-          <CookieBanner
-            forceOpenModal={cookieSettingsOpen}
-            onCloseModal={() => setCookieSettingsOpen(false)}
-            onNavigatePrivacy={() => handleNavigate('datenschutz')}
           />
 
         </div>

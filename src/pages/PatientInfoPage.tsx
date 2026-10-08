@@ -1,231 +1,96 @@
 import React from 'react';
-import { PATIENT_FAQS } from '../data/faqs';
-import { ARTEMIS_NETWORK_STATS } from '../data/clinics';
-import { useLanguage } from '../context/LanguageContext';
-import {
-  CheckCircle2,
-  HelpCircle,
-  ShieldCheck,
-  FileText,
-  Car,
-  CreditCard,
-  Calendar,
-} from 'lucide-react';
-
-import { PatientExperienceForm } from '../components/PatientExperienceForm';
+import { ArrowRight, Check, CreditCard, FileText, Glasses, Phone } from 'lucide-react';
 
 interface PatientInfoPageProps {
   onOpenBooking: () => void;
   onOpenEmergency: () => void;
 }
 
-export const PatientInfoPage: React.FC<PatientInfoPageProps> = ({
-  onOpenBooking,
-  onOpenEmergency,
-}) => {
-  const { t, language } = useLanguage();
+export const PatientInfoPage: React.FC<PatientInfoPageProps> = ({ onOpenBooking, onOpenEmergency }) => {
+  const checklist = [
+    'Versichertenkarte und gegebenenfalls Überweisung',
+    'Aktuelle Brille, Brillenpass oder Kontaktlinsenwerte',
+    'Liste Ihrer Medikamente und Augentropfen',
+    'Vorbefunde und Berichte zu früheren Augenuntersuchungen oder Operationen',
+  ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-14 pb-20">
-      
-      {/* Header */}
-      <div className="max-w-3xl space-y-3">
-        <span className="text-xs font-semibold uppercase tracking-wider text-sky-800">
-          {t('Service & Orientierung', 'Service & Patient Guidance')}
-        </span>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-          {t('Patienten-Informationen & Erstbesuch', 'Patient Information & First Visit')}
-        </h1>
-        <p className="text-base text-slate-600 leading-relaxed">
-          {t(
-            'Alles, was Sie für Ihren Besuch im ARTEMIS Augenzentrum Leverkusen und der Praxis Opladen wissen müssen: Checklisten, Fahrtauglichkeit, Kosten und Antworten auf die häufigsten Fragen.',
-            'Everything you need to know for your appointment at ARTEMIS Eye Center Leverkusen and Opladen Practice: checklists, driving notices, insurance, and FAQs.'
-          )}
+    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+      <header className="max-w-3xl">
+        <p className="clinic-eyebrow">Service und Orientierung</p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[#15344a] sm:text-5xl">Informationen für Ihren Besuch</h1>
+        <p className="mt-4 text-base leading-relaxed text-[#526873]">
+          Die wichtigsten Hinweise zur Terminvereinbarung, zur Vorbereitung und zu Kostenfragen. Wenn Sie unsicher sind, welche Praxis für Ihr Anliegen zuständig ist, fragen Sie bitte telefonisch nach.
         </p>
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          <button className="button-primary" onClick={onOpenBooking}><Phone aria-hidden="true" className="h-4 w-4" />Kontakt und Terminvereinbarung</button>
+          <button className="button-secondary" onClick={onOpenEmergency}>Akute Beschwerden <ArrowRight aria-hidden="true" className="h-4 w-4" /></button>
+        </div>
+      </header>
+
+      <div className="mt-10 grid gap-6 lg:grid-cols-2">
+        <section className="clinic-card p-6 sm:p-8">
+          <div className="flex items-center gap-3">
+            <span className="rounded-xl bg-[#e9f2f0] p-2.5 text-[#176b68]"><FileText aria-hidden="true" className="h-5 w-5" /></span>
+            <h2 className="text-xl font-semibold text-[#15344a]">Bitte mitbringen</h2>
+          </div>
+          <ul className="mt-6 space-y-3">
+            {checklist.map((item) => <li key={item} className="flex gap-3 text-sm leading-relaxed text-[#425864]"><Check aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-[#16766f]" /><span>{item}</span></li>)}
+          </ul>
+          <div className="mt-6 rounded-xl bg-[#f4f7f6] p-4 text-sm leading-relaxed text-[#526873]">
+            Werden bei einer Untersuchung die Pupillen erweitert, kann das Sehen vorübergehend beeinträchtigt sein. Fragen Sie bei der Terminvereinbarung nach und planen Sie bei Bedarf eine Begleitung ein.
+          </div>
+        </section>
+
+        <section className="clinic-card p-6 sm:p-8">
+          <div className="flex items-center gap-3">
+            <span className="rounded-xl bg-[#e9f2f0] p-2.5 text-[#176b68]"><CreditCard aria-hidden="true" className="h-5 w-5" /></span>
+            <h2 className="text-xl font-semibold text-[#15344a]">Fragen zu Kosten und Versicherung</h2>
+          </div>
+          <p className="mt-5 text-sm leading-relaxed text-[#526873]">
+            Ob eine Untersuchung oder Behandlung von Ihrer Krankenkasse übernommen wird, hängt unter anderem vom Befund, der medizinischen Notwendigkeit und Ihrem Versicherungsvertrag ab. Eine pauschale Kostenzusage können wir online nicht machen.
+          </p>
+          <p className="mt-3 text-sm leading-relaxed text-[#526873]">
+            Fragen Sie die Praxis vor der Untersuchung, ob Kosten entstehen können. Bei zusätzlichen Selbstzahlerleistungen sollten Sie die Leistung und den voraussichtlichen Preis vorab erläutert bekommen.
+          </p>
+          <button className="mt-6 text-sm font-semibold text-[#176b68] hover:underline" onClick={onOpenBooking}>
+            Praxis kontaktieren <ArrowRight aria-hidden="true" className="ml-1 inline h-4 w-4" />
+          </button>
+        </section>
       </div>
 
-      {/* 1. Checklist Erstbesuch */}
-      <section className="bg-white rounded-3xl border border-slate-200 p-8 shadow-xs">
-        <div className="flex items-center gap-2 mb-4 text-xs font-semibold uppercase tracking-wider text-sky-800">
-          <FileText className="w-4 h-4" />
-          <span>{t('Checkliste für Ihren Termin', 'Appointment Checklist')}</span>
+      <section className="mt-10">
+        <div className="max-w-2xl">
+          <p className="clinic-eyebrow">Häufige Fragen</p>
+          <h2 className="mt-2 text-2xl font-semibold text-[#15344a] sm:text-3xl">Vor dem Termin</h2>
         </div>
-        <h2 className="text-2xl font-bold text-slate-900 mb-4">
-          {t('Was sollten Sie zu Ihrem Termin mitbringen?', 'What to Bring to Your Visit')}
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-700">
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-3">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-            <div>
-              <strong className="text-slate-900 text-sm block mb-1">
-                {t('Elektronische Gesundheitskarte (eGK)', 'Health Insurance Card')}
-              </strong>
-              <span>{t('Ihre gültige Versichertenkarte für gesetzlich versicherte Patienten.', 'Your valid chip card for statutory insurance verification.')}</span>
-            </div>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-3">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-            <div>
-              <strong className="text-slate-900 text-sm block mb-1">
-                {t('Aktuelle Brillen & Brillenpass', 'Current Spectacles & Prescription')}
-              </strong>
-              <span>{t('Bringen Sie Fern-, Lese- und Arbeitsplatzbrillen sowie Kontaktlinsenwerte mit.', 'Bring current distance/reading glasses and contact lens parameters.')}</span>
-            </div>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-3">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-            <div>
-              <strong className="text-slate-900 text-sm block mb-1">
-                {t('Medikamentenplan & Augentropfen', 'Medication List & Eye Drops')}
-              </strong>
-              <span>{t('Insbesondere Blutverdünner, Blutdruckmittel und alle bisher angewendeten Augentropfen.', 'Especially blood thinners, glaucoma drops, or artificial tears.')}</span>
-            </div>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-3">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-            <div>
-              <strong className="text-slate-900 text-sm block mb-1">
-                {t('Vorbefunde & OP-Berichte', 'Medical History & Prior Reports')}
-              </strong>
-              <span>{t('Relevante Berichte früherer Augenuntersuchungen oder chirurgischer Eingriffe.', 'Reports of past retinal scans, cataract surgeries, or laser therapies.')}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Driving warning notice */}
-        <div className="mt-6 p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-3 text-xs text-amber-900">
-          <Car className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
-          <div>
-            <strong>{t('Hinweis zur Fahrtauglichkeit bei Netzhautuntersuchungen:', 'Notice on Driving Fitness After Dilation:')}</strong>{' '}
-            {t(
-              'Werden für eine fundierte Netzhautuntersuchung pupillenerweiternde Augentropfen verabreicht, dürfen Sie für ca. 4 bis 5 Stunden kein Kraftfahrzeug, E-Bike oder Fahrrad im Straßenverkehr führen. Bitte reisen Sie mit öffentlichen Verkehrsmitteln an oder lassen Sie sich begleiten.',
-              'If dilating eye drops are administered, you are legally prohibited from driving cars or bikes for approximately 4 to 5 hours. Please organize public transport or an escort.'
-            )}
-          </div>
+        <div className="mt-5 max-w-3xl divide-y divide-[#dce6e5] rounded-2xl border border-[#dce6e5] bg-white px-5 sm:px-7">
+          <details className="faq-item" open>
+            <summary>Wie vereinbare ich einen Termin?</summary>
+            <p>Für das Augenzentrum Leverkusen können Sie die Online-Terminbuchung nutzen. Für die Praxis Opladen vereinbaren Sie Termine telefonisch unter 02171 1490.</p>
+          </details>
+          <details className="faq-item">
+            <summary>Kann ich ohne Termin in die Praxis kommen?</summary>
+            <p>Bitte rufen Sie vorab am gewünschten Standort an. Die Praxis kann Ihnen sagen, ob ein Termin erforderlich ist und wann Sie kommen können.</p>
+          </details>
+          <details className="faq-item">
+            <summary>Welche Praxis ist für mein Anliegen zuständig?</summary>
+            <p>Das Leistungsangebot unterscheidet sich je nach Standort. Wenden Sie sich an das Praxisteam, wenn Sie Hilfe bei der Zuordnung benötigen.</p>
+          </details>
+          <details className="faq-item">
+            <summary>Wo finde ich Öffnungszeiten und Anfahrt?</summary>
+            <p>Die jeweils aktuellen Angaben stehen auf den Standortseiten. Nutzen Sie die Standortübersicht, um die Praxis in Leverkusen oder Opladen auszuwählen.</p>
+          </details>
         </div>
       </section>
 
-      {/* 2. Insurance & Costs */}
-      <section className="bg-slate-50 rounded-3xl border border-slate-200 p-8">
-        <div className="flex items-center gap-2 mb-2 text-xs font-semibold uppercase tracking-wider text-sky-800">
-          <CreditCard className="w-4 h-4" />
-          <span>{t('Transparenz', 'Transparency')}</span>
+      <section className="mt-10 rounded-2xl bg-[#15344a] p-6 text-white sm:flex sm:items-center sm:justify-between sm:gap-8 sm:p-8">
+        <div>
+          <div className="flex items-center gap-3"><Glasses aria-hidden="true" className="h-6 w-6 text-[#8fd2ca]" /><h2 className="text-xl font-semibold">Akute Augenbeschwerden?</h2></div>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/75">Bei plötzlichen oder starken Beschwerden finden Sie wichtige Hinweise und Anlaufstellen auf unserer Notfallseite. Bei einem lebensbedrohlichen Notfall rufen Sie 112.</p>
         </div>
-        <h2 className="text-2xl font-bold text-slate-900 mb-6">
-          {t('Krankenkassen, Kosten & IGeL-Leistungen', 'Insurance, Costs & Elective Upgrades')}
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-700">
-          <div className="p-5 bg-white rounded-2xl border border-slate-200">
-            <h3 className="font-bold text-sm text-slate-900 mb-2">
-              {t('Gesetzliche Kassen (GKV)', 'Public Insurance (GKV)')}
-            </h3>
-            <p className="leading-relaxed text-slate-600">
-              {t(
-                'Alle medizinisch indizierten Grundleistungen, Katarakt-Operationen mit Standardlinse, IVOM-Therapien und Glaukombehandlungen werden vollständig von den gesetzlichen Krankenkassen übernommen.',
-                'Medically necessary basic treatments, standard cataract surgery, and IVOM therapy are 100% covered by public health funds.'
-              )}
-            </p>
-          </div>
-
-          <div className="p-5 bg-white rounded-2xl border border-slate-200">
-            <h3 className="font-bold text-sm text-slate-900 mb-2">
-              {t('Private Kassen (PKV)', 'Private Insurance (PKV)')}
-            </h3>
-            <p className="leading-relaxed text-slate-600">
-              {t(
-                'Private Krankenversicherungen und die Beihilfe erstatten in der Regel alle apparativen Diagnoseverfahren (OCT, IOL-Master, etc.) sowie Premium-Linsen bei entsprechender tariflicher Vereinbarung.',
-                'Private insurances typically reimburse advanced diagnostics (OCT, optical biometry) and premium lenses depending on your plan.'
-              )}
-            </p>
-          </div>
-
-          <div className="p-5 bg-white rounded-2xl border border-slate-200">
-            <h3 className="font-bold text-sm text-slate-900 mb-2">
-              {t('Selbstzahler & IGeL', 'Elective Care & Upgrades')}
-            </h3>
-            <p className="leading-relaxed text-slate-600">
-              {t(
-                'Refraktive Eingriffe zur Brillenfreiheit (Femto-LASIK, EVO Visian ICL), vorsorgliche OCT-Früherkennungen sowie Premium-Linsenupgrades werden transparent nach GOÄ abgerechnet.',
-                'Refractive surgery (LASIK, ICL) and preventative OCT scans without prior diagnosis are transparently billed according to GOÄ.'
-              )}
-            </p>
-          </div>
-        </div>
+        <button className="button-light mt-5 shrink-0 sm:mt-0" onClick={onOpenEmergency}>Notfallinformationen <ArrowRight aria-hidden="true" className="h-4 w-4" /></button>
       </section>
-
-      {/* 3. Hygiene & Quality Standards */}
-      <section className="bg-white rounded-3xl border border-slate-200 p-8">
-        <div className="flex items-center gap-2 mb-2 text-xs font-semibold uppercase tracking-wider text-sky-800">
-          <ShieldCheck className="w-4 h-4" />
-          <span>{t('Patientensicherheit', 'Patient Safety')}</span>
-        </div>
-        <h2 className="text-2xl font-bold text-slate-900 mb-6">
-          {t('Qualitätsmanagement & Hygiene im OP-Zentrum', 'Quality Management & Surgical Hygiene')}
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs text-slate-700">
-          <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-            <div className="font-bold text-sky-800 text-sm mb-1">DIN EN ISO 9001</div>
-            <p className="text-slate-600">Zertifiziertes Qualitätsmanagement aller klinischen und operativen Abläufe.</p>
-          </div>
-
-          <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-            <div className="font-bold text-sky-800 text-sm mb-1">RKI-Hygienestandards</div>
-            <p className="text-slate-600">Strikte Sterilitätsüberwachung und Reinraum-Lüftungstechnik im OP Leverkusen.</p>
-          </div>
-
-          <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-            <div className="font-bold text-sky-800 text-sm mb-1">BDOC Qualitätssiegel</div>
-            <p className="text-slate-600">Anerkannter Qualitätsstandard des Bundes Deutscher OphthalmoChirurgen.</p>
-          </div>
-
-          <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-            <div className="font-bold text-sky-800 text-sm mb-1">FEBO Zertifizierung</div>
-            <p className="text-slate-600">Dr. Arani führt das höchste europäische Facharztexamen für Augenheilkunde.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. Anonymous Patient Experience Feedback Form */}
-      <PatientExperienceForm />
-
-      {/* 5. Categorized FAQs */}
-      <section className="space-y-6">
-        <div className="text-center max-w-2xl mx-auto">
-          <span className="text-xs font-semibold uppercase tracking-wider text-sky-800">
-            {t('Wissensdatenbank', 'Knowledge Base')}
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">
-            {t('Alle Patienten-FAQs im Überblick', 'All Frequently Asked Questions')}
-          </h2>
-        </div>
-
-        <div className="space-y-3 max-w-3xl mx-auto">
-          {PATIENT_FAQS.map((faq) => (
-            <details
-              key={faq.id}
-              className="group bg-white rounded-xl border border-slate-200 p-4 open:border-sky-300"
-            >
-              <summary className="font-semibold text-xs sm:text-sm text-slate-900 cursor-pointer list-none flex items-center justify-between gap-4">
-                <span>{language === 'de' ? faq.question : faq.questionEn}</span>
-                <span className="text-slate-400 group-open:rotate-180 transition-transform shrink-0">▼</span>
-              </summary>
-              <div className="mt-3 text-xs text-slate-600 leading-relaxed pt-3 border-t border-slate-100">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-sky-700 block mb-1">
-                  Kategorie: {language === 'de' ? faq.category : faq.categoryEn}
-                </span>
-                <p>{language === 'de' ? faq.answer : faq.answerEn}</p>
-              </div>
-            </details>
-          ))}
-        </div>
-      </section>
-
     </div>
   );
 };

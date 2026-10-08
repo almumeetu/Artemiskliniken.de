@@ -1,11 +1,10 @@
-import React, { useState, useMemo } from 'react';
-import { X, Search, ChevronRight, Stethoscope, AlertCircle, MapPin, User, HelpCircle } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { X, Search, ChevronRight } from 'lucide-react';
 import { TREATMENTS } from '../data/treatments';
 import { EYE_DISEASES } from '../data/diseases';
 import { DIAGNOSTICS } from '../data/diagnostics';
 import { DOCTORS } from '../data/doctors';
 import { CLINIC_LOCATIONS } from '../data/clinics';
-import { PATIENT_FAQS } from '../data/faqs';
 import { useLanguage } from '../context/LanguageContext';
 
 interface SearchModalProps {
@@ -22,12 +21,21 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   const { language, t } = useLanguage();
   const [query, setQuery] = useState('');
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return [];
 
     const list: {
-      type: 'treatment' | 'disease' | 'diagnostic' | 'doctor' | 'location' | 'faq';
+      type: 'treatment' | 'disease' | 'diagnostic' | 'doctor' | 'location';
       title: string;
       desc: string;
       tab: string;
@@ -39,8 +47,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       const match =
         item.name.toLowerCase().includes(q) ||
         item.nameEn.toLowerCase().includes(q) ||
-        item.shortSummary.toLowerCase().includes(q) ||
-        item.symptoms.some((s) => s.toLowerCase().includes(q));
+        item.shortSummary.toLowerCase().includes(q);
       if (match) {
         list.push({
           type: 'treatment',
@@ -122,21 +129,6 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       }
     });
 
-    // FAQs
-    PATIENT_FAQS.forEach((faq) => {
-      const match =
-        faq.question.toLowerCase().includes(q) ||
-        faq.answer.toLowerCase().includes(q);
-      if (match) {
-        list.push({
-          type: 'faq',
-          title: language === 'de' ? faq.question : faq.questionEn,
-          desc: language === 'de' ? faq.answer.slice(0, 110) + '...' : faq.answerEn.slice(0, 110) + '...',
-          tab: 'patienten-info',
-        });
-      }
-    });
-
     return list.slice(0, 12);
   }, [query, language]);
 
@@ -148,8 +140,12 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       aria-modal="true"
       aria-labelledby="search-modal-title"
       className="fixed inset-0 z-50 flex items-start justify-center p-3 pt-6 sm:p-4 sm:pt-16 bg-slate-950/70 backdrop-blur-sm overflow-y-auto"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
     >
       <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden my-auto sm:my-0">
+        <h2 id="search-modal-title" className="sr-only">{t('Website durchsuchen', 'Search the website')}</h2>
         
         {/* Search Input Bar */}
         <div className="p-4 border-b border-slate-200 flex items-center gap-3">
@@ -160,11 +156,12 @@ export const SearchModal: React.FC<SearchModalProps> = ({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t(
-              'Suchen nach Grauer Star, SLT-Laser, Dr. Arani, Sehtest, Opladen...',
-              'Search for Cataract, SLT laser, Dr. Arani, Eye exam, Opladen...'
+              'Suchen nach Grauem Star, OCT, Dr. Arani, Glaukom, Opladen ...',
+              'Search for cataracts, OCT, Dr. Arani, glaucoma, Opladen ...'
             )}
+            aria-label={t('Suchbegriff', 'Search term')}
             className="w-full text-sm md:text-base text-slate-900 placeholder-slate-400 focus:outline-none"
-            id="search-modal-title"
+            id="site-search"
           />
           <button
             onClick={onClose}
@@ -183,7 +180,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                 {t('Beliebte Suchbegriffe:', 'Popular Search Topics:')}
               </p>
               <div className="flex flex-wrap justify-center gap-2 max-w-md mx-auto">
-                {['Grauer Star', 'Dr. Arani', 'OCT Netzhaut', 'Augenlasern', 'Kinder-Sehschule', 'Notfall 0214 44488', 'Opladen'].map((term) => (
+                {['Grauer Star', 'Dr. Arani', 'OCT', 'Glaukom', 'Makuladegeneration', 'Sehschule', 'Opladen'].map((term) => (
                   <button
                     key={term}
                     onClick={() => setQuery(term)}
@@ -201,10 +198,13 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               </p>
               <p>
                 {t(
-                  'Bitte versuchen Sie einen anderen Suchbegriff oder rufen Sie uns direkt an unter 0214 44488.',
-                  'Please try another keyword or contact our staff directly at 0214 44488.'
+                  'Bitte versuchen Sie einen anderen Suchbegriff. Unter „Standorte“ finden Sie beide Telefonnummern.',
+                  'Please try another search term. Both phone numbers are listed under Locations.'
                 )}
               </p>
+              <button className="mt-4 font-semibold text-[#176b68] hover:underline" onClick={() => { onSelectResult('standorte'); onClose(); }}>
+                {t('Zu den Standorten', 'View locations')} <span aria-hidden="true">→</span>
+              </button>
             </div>
           ) : (
             <div className="space-y-2">
@@ -220,7 +220,10 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
                       <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
-                        {res.type}
+                        {t(
+                          res.type === 'treatment' ? 'Behandlung' : res.type === 'disease' ? 'Augenkrankheit' : res.type === 'diagnostic' ? 'Diagnostik' : res.type === 'doctor' ? 'Ärztliches Team' : 'Standort',
+                          res.type === 'treatment' ? 'Treatment' : res.type === 'disease' ? 'Eye condition' : res.type === 'diagnostic' ? 'Diagnostics' : res.type === 'doctor' ? 'Medical team' : 'Location'
+                        )}
                       </span>
                       <h4 className="font-semibold text-sm text-slate-900 group-hover:text-sky-800 truncate">
                         {res.title}
