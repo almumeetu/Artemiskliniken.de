@@ -1,5 +1,6 @@
 import React from 'react';
 import { CLINIC_LOCATIONS } from '../data/clinics';
+import { DOCTORS } from '../data/doctors';
 
 const dayOfWeek: Record<string, string> = {
   Montag: 'https://schema.org/Monday',
@@ -15,6 +16,13 @@ function timeRanges(value: string): { opens: string; closes: string }[] {
 }
 
 export const SchemaMarkup: React.FC = () => {
+  const clinicIdFor = (locationId: string) => {
+    const location = CLINIC_LOCATIONS.find((item) => item.id === locationId);
+    if (!location) return undefined;
+    const slug = location.id === 'leverkusen' ? 'artemis-augenzentrum-leverkusen' : 'artemis-augenarzt-praxis-opladen';
+    return `https://www.artemiskliniken.de/standorte/${slug}/#clinic`;
+  };
+
   const clinics = CLINIC_LOCATIONS.map((location) => ({
     '@type': 'MedicalClinic',
     '@id': 'https://www.artemiskliniken.de/standorte/' + (location.id === 'leverkusen' ? 'artemis-augenzentrum-leverkusen' : 'artemis-augenarzt-praxis-opladen') + '/#clinic',
@@ -37,5 +45,16 @@ export const SchemaMarkup: React.FC = () => {
     }),
   }));
 
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ '@context': 'https://schema.org', '@graph': clinics }) }} />;
+  const physicians = DOCTORS.map((doctor) => ({
+    '@type': 'Physician',
+    '@id': `https://www.artemiskliniken.de/#aerzte/${doctor.slug}`,
+    name: doctor.name,
+    jobTitle: doctor.role,
+    medicalSpecialty: doctor.specialties,
+    knowsAbout: doctor.focalAreas,
+    worksFor: doctor.locations.map((locationId) => ({ '@id': clinicIdFor(locationId) })),
+    url: `https://www.artemiskliniken.de/#aerzte/${doctor.slug}`,
+  }));
+
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ '@context': 'https://schema.org', '@graph': [...clinics, ...physicians] }) }} />;
 };

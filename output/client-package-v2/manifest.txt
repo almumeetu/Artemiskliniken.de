@@ -1,0 +1,4 @@
+CLIENT_SEND/01_Projektangebot_DE.pdf
+EDITABLE/01_Projektangebot_DE.docx
+CLIENT_SEND/02_Vergleich_DE.pdf
+EDITABLE/02_Vergleich_DE.docx

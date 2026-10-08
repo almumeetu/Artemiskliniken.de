@@ -1,0 +1,35 @@
+{
+  "reference_sha256": "ce01e996bf247041423e6db51a0d772b5d1dcc7ed2c32ee82ee2478823cabbb6",
+  "reference_unchanged": true,
+  "pdf_checks": [
+    {
+      "file": "CLIENT_SEND/01_Projektangebot_DE.pdf",
+      "pages": 7,
+      "clickable_links": 4,
+      "strict_pdf_parse": true,
+      "clean_text_extraction": true,
+      "original_six_page_text_content_preserved": true,
+      "source_page_6_annotations_preserved": 4,
+      "appended_page_rendered_as_single_page_and_inspected": true
+    },
+    {
+      "file": "CLIENT_SEND/02_Vergleich_DE.pdf",
+      "pages": 1,
+      "clickable_links": 3,
+      "strict_pdf_parse": true,
+      "final_pixels_identical_to_reviewed_render": true,
+      "clean_text_extraction": true
+    }
+  ],
+  "arithmetic_verified": true,
+  "visual_review": "The appended PDF page was rendered as one A4 page and inspected in Chrome at 100%. The merged PDF opens as seven pages; source page text and four annotations on page 6 were preserved. DOCX package structure was validated; no native Word renderer was available.",
+  "docx_checks": [
+    {
+      "file": "EDITABLE/01_Projektangebot_DE.docx",
+      "package_xml_valid": true,
+      "appendix_before_final_section_properties": true,
+      "appendix_starts_on_new_page": true,
+      "native_word_visual_render": false
+    }
+  ]
+}

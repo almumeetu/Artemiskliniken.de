@@ -10,7 +10,7 @@ export const EmergencyPage: React.FC = () => {
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
       <header className="max-w-3xl">
         <p className="clinic-eyebrow">Hilfe bei akuten Beschwerden</p>
-        <h1 className="mt-2 text-3xl font-semibold leading-tight tracking-tight text-[#15344a] sm:text-5xl">Sie brauchen heute augenärztliche Hilfe?</h1>
+        <h1 className="mt-2 text-3xl font-semibold leading-tight tracking-tight text-[#173c78] sm:text-5xl">Sie brauchen heute augenärztliche Hilfe?</h1>
         <p className="mt-4 text-base leading-relaxed text-[#526873]">
           Bei plötzlichen oder starken Augenbeschwerden wenden Sie sich zeitnah an eine medizinische Fachstelle. Diese Website kann keine Diagnose stellen und keine individuelle Dringlichkeit einschätzen.
         </p>
@@ -31,13 +31,13 @@ export const EmergencyPage: React.FC = () => {
 
       <section className="mt-10">
         <p className="clinic-eyebrow">ARTEMIS Leverkusen</p>
-        <h2 className="mt-2 text-2xl font-semibold text-[#15344a]">Während der Öffnungszeiten</h2>
+        <h2 className="mt-2 text-2xl font-semibold text-[#173c78]">Während der Öffnungszeiten</h2>
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-[#526873]">Rufen Sie den Standort an und schildern Sie Ihr Anliegen. Das Praxisteam kann Ihnen mitteilen, ob eine Untersuchung vor Ort möglich ist. Bitte nutzen Sie die Praxisnummern nicht als Notruf.</p>
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
           {CLINIC_LOCATIONS.map((location) => (
             <article className="clinic-card flex items-center justify-between gap-4 p-5" key={location.id}>
               <div>
-                <h3 className="font-semibold text-[#15344a]">{location.name}</h3>
+                <h3 className="font-semibold text-[#173c78]">{location.name}</h3>
                 <p className="mt-1 text-sm text-[#526873]">{location.phoneDisplay}</p>
               </div>
               <a className="button-secondary button-secondary-small shrink-0" href={'tel:' + location.phone}><Phone aria-hidden="true" className="h-4 w-4" />Anrufen</a>
@@ -48,7 +48,7 @@ export const EmergencyPage: React.FC = () => {
 
       <p className="mt-8 rounded-xl bg-[#f2f6f5] p-4 text-sm leading-relaxed text-[#526873]">
         {t('Weitere Informationen zum ärztlichen Bereitschaftsdienst und zur Abgrenzung zwischen 116 117 und 112 finden Sie beim Patientenservice.', 'For more information about Germany’s medical on-call service and when to call 116 117 or 112, visit the national patient service.')}{' '}
-        <a className="inline-flex items-center gap-1 font-semibold text-[#176b68] hover:underline" href="https://www.116117.de/de/aerztlicher-bereitschaftsdienst.php" target="_blank" rel="noopener noreferrer">116117.de <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></a>
+        <a className="inline-flex items-center gap-1 font-semibold text-[#087bb2] hover:underline" href="https://www.116117.de/de/aerztlicher-bereitschaftsdienst.php" target="_blank" rel="noopener noreferrer">116117.de <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></a>
       </p>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { lazy, Suspense, useState, useEffect } from 'react';
 import { LanguageProvider } from './context/LanguageContext';
 import { AccessibilityProvider } from './context/AccessibilityContext';
 import { SchemaMarkup } from './components/SchemaMarkup';
@@ -10,27 +10,27 @@ import { Footer } from './components/Footer';
 import { BookingWizard } from './components/BookingWizard';
 import { SearchModal } from './components/SearchModal';
 
-// Pages
-import { HomePage } from './pages/HomePage';
-import { LeverkusenPage } from './pages/LeverkusenPage';
-import { OpladenPage } from './pages/OpladenPage';
-import { StandortePage } from './pages/StandortePage';
-import { TreatmentsPage } from './pages/TreatmentsPage';
-import { TreatmentDetailPage } from './pages/TreatmentDetailPage';
-import { DiseasesPage } from './pages/DiseasesPage';
-import { DiseaseDetailPage } from './pages/DiseaseDetailPage';
-import { DiagnosticsPage } from './pages/DiagnosticsPage';
-import { DiagnosticDetailPage } from './pages/DiagnosticDetailPage';
-import { DoctorsPage } from './pages/DoctorsPage';
-import { DoctorDetailPage } from './pages/DoctorDetailPage';
-import { PatientInfoPage } from './pages/PatientInfoPage';
-import { EmergencyPage } from './pages/EmergencyPage';
-import { LegalPage } from './pages/LegalPage';
 import { TREATMENTS } from './data/treatments';
 import { EYE_DISEASES } from './data/diseases';
 import { DIAGNOSTICS } from './data/diagnostics';
 import { DOCTORS } from './data/doctors';
 import { CLINIC_LOCATIONS } from './data/clinics';
+
+const HomePage = lazy(() => import('./pages/HomePage').then((module) => ({ default: module.HomePage })));
+const LeverkusenPage = lazy(() => import('./pages/LeverkusenPage').then((module) => ({ default: module.LeverkusenPage })));
+const OpladenPage = lazy(() => import('./pages/OpladenPage').then((module) => ({ default: module.OpladenPage })));
+const StandortePage = lazy(() => import('./pages/StandortePage').then((module) => ({ default: module.StandortePage })));
+const TreatmentsPage = lazy(() => import('./pages/TreatmentsPage').then((module) => ({ default: module.TreatmentsPage })));
+const TreatmentDetailPage = lazy(() => import('./pages/TreatmentDetailPage').then((module) => ({ default: module.TreatmentDetailPage })));
+const DiseasesPage = lazy(() => import('./pages/DiseasesPage').then((module) => ({ default: module.DiseasesPage })));
+const DiseaseDetailPage = lazy(() => import('./pages/DiseaseDetailPage').then((module) => ({ default: module.DiseaseDetailPage })));
+const DiagnosticsPage = lazy(() => import('./pages/DiagnosticsPage').then((module) => ({ default: module.DiagnosticsPage })));
+const DiagnosticDetailPage = lazy(() => import('./pages/DiagnosticDetailPage').then((module) => ({ default: module.DiagnosticDetailPage })));
+const DoctorsPage = lazy(() => import('./pages/DoctorsPage').then((module) => ({ default: module.DoctorsPage })));
+const DoctorDetailPage = lazy(() => import('./pages/DoctorDetailPage').then((module) => ({ default: module.DoctorDetailPage })));
+const PatientInfoPage = lazy(() => import('./pages/PatientInfoPage').then((module) => ({ default: module.PatientInfoPage })));
+const EmergencyPage = lazy(() => import('./pages/EmergencyPage').then((module) => ({ default: module.EmergencyPage })));
+const LegalPage = lazy(() => import('./pages/LegalPage').then((module) => ({ default: module.LegalPage })));
 
 const ROUTABLE_TABS = new Set([
   'home', 'standorte', 'behandlungen', 'augenkrankheiten', 'diagnostik', 'aerzte',
@@ -181,6 +181,7 @@ export default function App() {
 
           {/* 3. Main View Router */}
           <main id="main-content" className="flex-1" tabIndex={-1}>
+            <Suspense fallback={<div className="mx-auto max-w-7xl px-4 py-20 text-center text-sm text-slate-600" role="status" aria-live="polite">Seite wird geladen …</div>}>
             {/* Home */}
             {currentTab === 'home' && (
               <HomePage
@@ -262,6 +263,7 @@ export default function App() {
             {/* Legal Pages */}
             {currentTab === 'impressum' && <LegalPage initialTab="impressum" />}
             {currentTab === 'datenschutz' && <LegalPage initialTab="datenschutz" />}
+            </Suspense>
           </main>
 
           {/* 4. Complete Verified Footer */}

@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useRef } from 'react';
 import { ArrowUpRight, CalendarDays, MapPin, Phone, X } from 'lucide-react';
 import { CLINIC_LOCATIONS } from '../data/clinics';
 import { useLanguage } from '../context/LanguageContext';
+import { useDialogFocus } from '../hooks/useDialogFocus';
 
 interface BookingWizardProps {
   isOpen: boolean;
@@ -16,15 +17,8 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
   preselectedLocation,
 }) => {
   const { t } = useLanguage();
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  const dialogRef = useRef<HTMLElement | null>(null);
+  useDialogFocus(isOpen, dialogRef, onClose);
 
   if (!isOpen) return null;
 
@@ -45,13 +39,15 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
         aria-labelledby="booking-dialog-title"
         aria-describedby="booking-dialog-description"
         aria-modal="true"
+        tabIndex={-1}
+        ref={dialogRef}
         className="w-full max-w-2xl overflow-hidden rounded-t-3xl border border-[#d6e1e1] bg-white shadow-2xl sm:rounded-3xl"
         role="dialog"
       >
         <div className="flex items-start justify-between gap-4 border-b border-[#e0e8e7] px-5 py-5 sm:px-7">
           <div>
             <p className="clinic-eyebrow">{t('Terminvereinbarung', 'Appointments')}</p>
-            <h2 id="booking-dialog-title" className="mt-1 text-xl font-semibold text-[#15344a] sm:text-2xl">
+            <h2 id="booking-dialog-title" className="mt-1 text-xl font-semibold text-[#173c78] sm:text-2xl">
               {t('Wählen Sie Ihren Standort', 'Choose a location')}
             </h2>
             <p id="booking-dialog-description" className="mt-2 max-w-xl text-sm leading-relaxed text-[#526873]">
@@ -67,9 +63,9 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
           {locations.map((location) => (
             <article key={location.id} className="rounded-2xl border border-[#dce6e5] bg-[#f8faf9] p-5">
               <div className="flex items-start gap-3">
-                <MapPin aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-[#16766f]" />
+                <MapPin aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-[#1c68a6]" />
                 <div>
-                  <h3 className="font-semibold text-[#15344a]">{location.name}</h3>
+                  <h3 className="font-semibold text-[#173c78]">{location.name}</h3>
                   <p className="mt-1 text-sm leading-relaxed text-[#526873]">{location.street}<br />{location.postalCode} {location.city}</p>
                 </div>
               </div>

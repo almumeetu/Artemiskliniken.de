@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight, Clock3, ExternalLink, Mail, MapPin, Phone } from 'lucide-react';
 import { CLINIC_LOCATIONS } from '../data/clinics';
+import { ARTEMIS_IMAGES } from '../data/imageAssets';
 
 interface FooterProps {
   onNavigate: (tab: string, slug?: string) => void;
@@ -11,9 +12,20 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
   return (
     <footer className="site-footer">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.2fr_1.2fr_0.8fr]">
+        <div className="site-footer__brand">
+          <div className="site-footer__identity">
+            <img className="site-footer__logo" src={ARTEMIS_IMAGES.logo} alt="ARTEMIS Augenheilkunde" />
+            <p>Augenmedizin in Leverkusen und Opladen</p>
+          </div>
+          <button className="site-footer__cta" type="button" onClick={onOpenBooking}>
+            Termin anfragen <ArrowRight aria-hidden="true" className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="site-footer__columns grid gap-5 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_0.8fr]">
           {CLINIC_LOCATIONS.map((location) => (
-            <section key={location.id}>
+            <section className="site-footer__location" key={location.id}>
+              <p className="site-footer__eyebrow">ARTEMIS Standort</p>
               <h2 className="text-base font-semibold text-white">{location.name}</h2>
               <address className="mt-3 not-italic text-sm leading-relaxed text-white/70">
                 {location.street}<br />{location.postalCode} {location.city}
@@ -26,7 +38,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenBooking }) => 
             </section>
           ))}
 
-          <section>
+          <section className="site-footer__direct-links">
+            <p className="site-footer__eyebrow">Orientierung</p>
             <h2 className="text-base font-semibold text-white">Direkt zu</h2>
             <ul className="mt-3 space-y-2 text-sm">
               <li><button className="footer-link" onClick={() => onNavigate('behandlungen')}>Behandlungen</button></li>

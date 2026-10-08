@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { X, Search, ChevronRight } from 'lucide-react';
 import { TREATMENTS } from '../data/treatments';
 import { EYE_DISEASES } from '../data/diseases';
@@ -6,6 +6,7 @@ import { DIAGNOSTICS } from '../data/diagnostics';
 import { DOCTORS } from '../data/doctors';
 import { CLINIC_LOCATIONS } from '../data/clinics';
 import { useLanguage } from '../context/LanguageContext';
+import { useDialogFocus } from '../hooks/useDialogFocus';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -20,15 +21,8 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 }) => {
   const { language, t } = useLanguage();
   const [query, setQuery] = useState('');
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  useDialogFocus(isOpen, dialogRef, onClose);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -144,7 +138,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         if (event.target === event.currentTarget) onClose();
       }}
     >
-      <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden my-auto sm:my-0">
+      <div ref={dialogRef} tabIndex={-1} className="relative my-auto w-full max-w-2xl overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl sm:my-0">
         <h2 id="search-modal-title" className="sr-only">{t('Website durchsuchen', 'Search the website')}</h2>
         
         {/* Search Input Bar */}
@@ -202,7 +196,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                   'Please try another search term. Both phone numbers are listed under Locations.'
                 )}
               </p>
-              <button className="mt-4 font-semibold text-[#176b68] hover:underline" onClick={() => { onSelectResult('standorte'); onClose(); }}>
+              <button className="mt-4 font-semibold text-[#087bb2] hover:underline" onClick={() => { onSelectResult('standorte'); onClose(); }}>
                 {t('Zu den Standorten', 'View locations')} <span aria-hidden="true">→</span>
               </button>
             </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Search, Calendar, Phone, Menu, X, Eye, Type, Contrast, MapPin, AlertTriangle } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { useAccessibility } from '../context/AccessibilityContext';
+import { ARTEMIS_IMAGES } from '../data/imageAssets';
 
 interface HeaderProps {
   currentTab: string;
@@ -25,8 +26,6 @@ export const Header: React.FC<HeaderProps> = ({
 
   const navLinks = [
     { id: 'behandlungen', label: t('Behandlungen', 'Treatments') },
-    { id: 'augenkrankheiten', label: t('Augenkrankheiten', 'Conditions') },
-    { id: 'diagnostik', label: t('Diagnostik', 'Diagnostics') },
     { id: 'aerzte', label: t('Ärzte', 'Doctors') },
     { id: 'standorte', label: t('Standorte', 'Locations') },
     { id: 'patienten-info', label: t('Patienten-Info', 'Patient Info') },
@@ -45,8 +44,8 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-[#fbfaf7]/95 backdrop-blur-xl border-b border-[#d8e5e7]">
-        <div className="hidden md:block bg-[#12304a] text-white/90 text-[11px]">
+      <header className="sticky top-0 z-40 border-b border-[#dce3ec] bg-white/95 backdrop-blur-xl">
+        <div className="hidden md:block bg-[#173c78] text-white/90 text-[11px]">
           <div className="max-w-7xl mx-auto px-6 lg:px-8 h-8 flex items-center justify-between">
             <div className="flex items-center gap-5">
               <span className="inline-flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-[#8bd3d9]" />Augenzentrum Leverkusen &amp; Praxis Opladen</span>
@@ -56,23 +55,15 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-[4.5rem] sm:h-[5.25rem] flex items-center justify-between gap-2 sm:gap-4">
           
-          {/* Zone 1: Single text element Brand wordmark */}
+          {/* Brand wordmark from the supplied ARTEMIS assets */}
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => onNavigate('home')}
-              className="text-left group focus:outline-none focus:ring-2 focus:ring-sky-600 rounded-sm"
+              className="rounded-sm text-left focus:outline-none focus:ring-2 focus:ring-sky-600"
               aria-label="ARTEMIS Augenzentrum Leverkusen Startseite"
             >
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <span className="text-xl sm:text-2xl font-bold tracking-tight text-[#12304a] group-hover:text-[#176b87] transition-colors">
-                  ARTEMIS
-                </span>
-                <span className="text-[10px] sm:text-xs uppercase tracking-wider text-[#176b87] font-semibold border-l border-[#c9dadd] pl-1.5 sm:pl-2">
-                  <span className="hidden sm:inline">Leverkusen & Opladen</span>
-                  <span className="sm:hidden">Leverkusen</span>
-                </span>
-              </div>
-              <span className="sr-only">Augenzentrum & Praxis Opladen</span>
+              <img className="h-auto w-28 sm:w-44" src={ARTEMIS_IMAGES.logo} alt="ARTEMIS Augenkliniken und medizinische Versorgungszentren" />
+              <span className="sr-only">Leverkusen und Opladen</span>
             </button>
           </div>
 
@@ -87,14 +78,14 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   key={link.id}
                   onClick={() => handleNavLinkClick(link.id)}
-                  className={`py-2 transition-colors relative whitespace-nowrap hover:text-[#176b87] ${
-                    isActive ? 'text-[#176b87] font-semibold' : 'text-slate-600'
+                  className={`py-2 transition-colors relative whitespace-nowrap hover:text-[#087bb2] ${
+                    isActive ? 'text-[#087bb2] font-semibold' : 'text-slate-600'
                   }`}
                 >
                   {link.label}
                   {isActive && (
                     <span
-                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1689a5]"
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#28a9d8]"
                       aria-hidden="true"
                     />
                   )}
@@ -104,12 +95,12 @@ export const Header: React.FC<HeaderProps> = ({
           </nav>
 
           {/* Zone 3: 1-2 primary actions + functional tools */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1 sm:gap-3">
             
             {/* Universal Search */}
             <button
               onClick={onOpenSearch}
-              className="p-2 text-slate-600 hover:text-[#12304a] hover:bg-[#e8f3f3] rounded-lg transition-colors focus:ring-2 focus:ring-[#1689a5]"
+              className="rounded-lg p-1.5 text-slate-600 transition-colors hover:bg-[#e8f3f3] hover:text-[#173c78] focus:ring-2 focus:ring-[#28a9d8] sm:p-2"
               aria-label={t('Suche öffnen (Behandlungen, Ärzte, Symptome)', 'Open search')}
               title={t('Suche', 'Search')}
             >
@@ -118,7 +109,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             <a
               href="tel:+4921444488"
-              className="p-2 text-slate-600 hover:text-[#12304a] hover:bg-[#e8f3f3] rounded-lg transition-colors sm:hidden"
+              className="rounded-lg p-1.5 text-slate-600 transition-colors hover:bg-[#e8f3f3] hover:text-[#173c78] sm:hidden"
               aria-label="ARTEMIS Augenzentrum Leverkusen anrufen: 0214 44488"
               title="Anrufen"
             >
@@ -129,9 +120,9 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="relative">
               <button
                 onClick={() => setShowA11yMenu(!showA11yMenu)}
-                className={`p-2 rounded-lg transition-colors focus:ring-2 focus:ring-sky-600 ${
+                className={`rounded-lg p-1.5 transition-colors focus:ring-2 focus:ring-sky-600 sm:p-2 ${
                   highContrast || textSize !== 'normal'
-                    ? 'bg-[#d8eff0] text-[#12304a]'
+                    ? 'bg-[#d8eff0] text-[#173c78]'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                 }`}
                 aria-label={t('Barrierefreiheit & Schriftgröße anpassen', 'Accessibility options')}
@@ -143,7 +134,7 @@ export const Header: React.FC<HeaderProps> = ({
 
               {showA11yMenu && (
                 <div
-                  className="absolute right-0 mt-2 w-64 bg-[#fbfaf7] rounded-xl shadow-xl border border-[#d8e5e7] p-3 z-50 text-xs"
+                  className="absolute right-0 z-50 mt-2 w-64 rounded-xl border border-[#dce3ec] bg-white p-3 text-xs shadow-xl"
                   role="dialog"
                   aria-label={t('Optionen für Barrierefreiheit', 'Accessibility settings')}
                 >
@@ -187,16 +178,18 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Primary Action CTA: Termin buchen */}
             <button
               onClick={onOpenBooking}
-              className="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 text-xs md:text-sm font-semibold text-white bg-[#176b87] hover:bg-[#12304a] active:bg-[#0c263a] rounded-lg transition-colors shadow-sm whitespace-nowrap focus:ring-2 focus:ring-[#1689a5]"
+              aria-label={t('Termin vereinbaren', 'Book an appointment')}
+              title={t('Termin vereinbaren', 'Book an appointment')}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#087bb2] p-1.5 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-[#173c78] active:bg-[#0a3268] focus:ring-2 focus:ring-[#28a9d8] sm:gap-2 sm:px-4 sm:py-2.5 md:text-sm whitespace-nowrap"
             >
               <Calendar className="w-4 h-4" aria-hidden="true" />
-              <span>{t('Termin vereinbaren', 'Book Appointment')}</span>
+              <span className="hidden min-[380px]:inline">{t('Termin', 'Book')}</span>
             </button>
 
             {/* Mobile menu hamburger toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="xl:hidden p-2 text-slate-600 hover:text-slate-900 hover:bg-[#e8f3f3] rounded-lg transition-colors focus:ring-2 focus:ring-[#1689a5]"
+              className="xl:hidden rounded-lg p-1.5 text-slate-600 transition-colors hover:bg-[#e8f3f3] hover:text-slate-900 focus:ring-2 focus:ring-[#28a9d8] sm:p-2"
               aria-label={mobileMenuOpen ? t('Menü schließen', 'Close menu') : t('Menü öffnen', 'Open menu')}
               aria-expanded={mobileMenuOpen}
             >
