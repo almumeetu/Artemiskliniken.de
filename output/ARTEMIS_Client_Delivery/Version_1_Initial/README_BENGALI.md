@@ -4,11 +4,11 @@
 
 ## ফাইলগুলো কীভাবে ব্যবহার করবেন
 
-1. `CLIENT_SEND/02_Vergleich_DE.pdf` হলো প্রথম পরিচয়ের জন্য এক পাতার comparison। প্রথম email-এর সঙ্গে এটিই দিন।
-2. `CLIENT_SEND/03_E_Mails_DE.txt`-এ প্রথম email ও meeting-এর পর quotation পাঠানোর email আছে। দ্বিতীয়টি meeting হওয়ার পর ব্যবহার করুন।
-3. Client আগ্রহ দেখালে `CLIENT_SEND/01_Projektangebot_DE.pdf` দিন। এতে scope, price, payment, schedule এবং acceptance criteria আছে।
-4. `EDITABLE/01_Projektangebot_DE.docx` Word-এ edit করতে পারবেন। `Angebotsdaten.json`-এ price ও business details একসঙ্গে রাখা আছে। JSON edit করলে PDF/DOCX নিজে থেকে বদলাবে না; দুটোতেই একই পরিবর্তন করুন।
-5. `INTERNAL` folder আপনার জন্য; client-কে পুরো ZIP forward করবেন না। Follow-up, demo script এবং evidence notes এখানে আছে।
+1. `01_CLIENT_READY/02_Management_Comparison_German.pdf` হলো প্রথম পরিচয়ের জন্য এক পাতার comparison। প্রথম email-এর সঙ্গে এটিই দিন।
+2. `01_CLIENT_READY/03_Client_Email_Templates_German.txt`-এ প্রথম email ও meeting-এর পর quotation পাঠানোর email আছে। দ্বিতীয়টি meeting হওয়ার পর ব্যবহার করুন।
+3. Client আগ্রহ দেখালে `01_CLIENT_READY/01_Project_Proposal_German.pdf` দিন। এতে scope, price, payment, schedule এবং acceptance criteria আছে।
+4. `02_EDITABLE_SOURCE/01_Project_Proposal_Editable_German.docx` Word-এ edit করতে পারবেন। `Quotation_Data.json`-এ price ও business details একসঙ্গে রাখা আছে। JSON edit করলে PDF/DOCX নিজে থেকে বদলাবে না; দুটোতেই একই পরিবর্তন করুন।
+5. `03_INTERNAL_SUPPORT` folder আপনার জন্য; client-কে পুরো folder forward করবেন না। Follow-up, demo script এবং evidence notes এখানে আছে।
 
 ## পাঠানোর আগে আপনার সিদ্ধান্ত
 

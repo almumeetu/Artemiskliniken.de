@@ -6,7 +6,7 @@
 
 ## Mac-এ ফাইল খুলবেন যেভাবে
 
-ফাইলগুলো আপনার computer-এ আগে থেকেই save করা আছে; browser download প্রয়োজন নেই। Finder-এ project-এর `output/client-package-v2` folder খুলুন। `CLIENT_SEND/01_Projektangebot_DE.pdf` double-click করলে quotation খুলবে। সব ফাইল একসঙ্গে নিতে `output/WebDevSS_ARTEMIS_Proposal_V2_Reference_Design.zip` ব্যবহার করুন।
+ফাইলগুলো আপনার computer-এ আগে থেকেই save করা আছে; browser download প্রয়োজন নেই। Finder-এ `output/ARTEMIS_Client_Delivery/Version_2_Refined` folder খুলুন। `01_CLIENT_READY/01_Project_Proposal_German.pdf` double-click করলে quotation খুলবে।
 
 ## Package ব্যবহার করার নিয়ম
 
@@ -14,11 +14,11 @@
 
 ## ফাইলগুলো কীভাবে ব্যবহার করবেন
 
-1. `CLIENT_SEND/02_Vergleich_DE.pdf` হলো প্রথম পরিচয়ের জন্য এক পাতার comparison। প্রথম email-এর সঙ্গে এটিই দিন।
-2. `CLIENT_SEND/03_E_Mails_DE.txt`-এ প্রথম email ও meeting-এর পর quotation পাঠানোর email আছে। দ্বিতীয়টি meeting হওয়ার পর ব্যবহার করুন।
-3. Client আগ্রহ দেখালে `CLIENT_SEND/01_Projektangebot_DE.pdf` দিন। এতে scope, price, payment, schedule এবং acceptance criteria আছে।
-4. `EDITABLE/01_Projektangebot_DE.docx` Word-এ edit করতে পারবেন। `Angebotsdaten.json`-এ price ও business details একসঙ্গে রাখা আছে। JSON edit করলে PDF/DOCX নিজে থেকে বদলাবে না; দুটোতেই একই পরিবর্তন করুন।
-5. `INTERNAL` folder আপনার জন্য; client-কে পুরো ZIP forward করবেন না। Follow-up, demo script এবং evidence notes এখানে আছে।
+1. `01_CLIENT_READY/02_Management_Comparison_German.pdf` হলো প্রথম পরিচয়ের জন্য এক পাতার comparison। প্রথম email-এর সঙ্গে এটিই দিন।
+2. `01_CLIENT_READY/03_Client_Email_Templates_German.txt`-এ প্রথম email ও meeting-এর পর quotation পাঠানোর email আছে। দ্বিতীয়টি meeting হওয়ার পর ব্যবহার করুন।
+3. Client আগ্রহ দেখালে `01_CLIENT_READY/01_Project_Proposal_German.pdf` দিন। এতে scope, price, payment, schedule এবং acceptance criteria আছে।
+4. `02_EDITABLE_SOURCE/01_Project_Proposal_Editable_German.docx` Word-এ edit করতে পারবেন। `Quotation_Data.json`-এ price ও business details একসঙ্গে রাখা আছে। JSON edit করলে PDF/DOCX নিজে থেকে বদলাবে না; দুটোতেই একই পরিবর্তন করুন।
+5. `03_INTERNAL_SUPPORT` folder আপনার জন্য; client-কে পুরো folder forward করবেন না। Follow-up, demo script এবং evidence notes এখানে আছে।
 
 ## পাঠানোর আগে আপনার সিদ্ধান্ত
 
@@ -57,4 +57,4 @@ Bangladesh: +880 1722 301927
 
 ## Edit করার পর
 
-Word-এ page fields refresh করুন এবং নতুন PDF export করে প্রতিটি page দেখুন। Client-কে পাঠানোর জন্য PDF-এর layout যাচাই করা হয়েছে; অন্যান্য editor-এ DOCX import করলে font বা floating box-এর অবস্থান বদলাতে পারে। পুরোনো `client-package` folder আগের version; এই V2 files ব্যবহার করুন।
+Word-এ page fields refresh করুন এবং নতুন PDF export করে প্রতিটি page দেখুন। Client-কে পাঠানোর জন্য PDF-এর layout যাচাই করা হয়েছে; অন্যান্য editor-এ DOCX import করলে font বা floating box-এর অবস্থান বদলাতে পারে। Version history মূল delivery folder-এ আলাদা রাখা আছে।
