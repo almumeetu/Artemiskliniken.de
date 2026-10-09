@@ -1,0 +1,5 @@
+PUBLIC DEMO: Noch nicht veröffentlicht.
+Lokal auf dem Entwicklungs-Mac: http://127.0.0.1:3001/
+Dieser lokale Link ist für ARTEMIS oder andere externe Empfänger nicht erreichbar. Vor einem öffentlichen Link Hosting, Domain, Freigaben und Veröffentlichung abstimmen.
+
+Manuelle Sichtprüfung: iPhone 14 Pro (393 x 852) und Pixel 7 Pro (480 x 1040), Startseite und Standorte. Bei der Sichtprüfung kein sichtbarer horizontaler Überlauf. Kein formaler Browser-/Geräte-Abnahmetest.
