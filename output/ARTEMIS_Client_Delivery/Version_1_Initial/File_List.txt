@@ -1,9 +1,0 @@
-01_CLIENT_READY/01_Project_Proposal_German.pdf
-01_CLIENT_READY/02_Management_Comparison_German.pdf
-01_CLIENT_READY/03_Client_Email_Templates_German.txt
-02_EDITABLE_SOURCE/01_Project_Proposal_Editable_German.docx
-02_EDITABLE_SOURCE/Quotation_Data.json
-03_INTERNAL_SUPPORT/04_Meeting_and_Followups_German.md
-03_INTERNAL_SUPPORT/06_Sources_and_Status_German.md
-03_INTERNAL_SUPPORT/07_Quality_Check_German.md
-README_BENGALI.md
